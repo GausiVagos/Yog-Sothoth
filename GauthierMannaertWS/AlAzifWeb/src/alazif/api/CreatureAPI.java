@@ -1,4 +1,5 @@
 package alazif.api;
+
 import java.util.HashSet;
 
 import javax.ws.rs.GET;
