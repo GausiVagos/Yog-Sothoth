@@ -1,5 +1,4 @@
 package alazif.dao;
-
 import alazif.javabean.CreatureName;
 
 public class CreatureNameDAO extends DAO<CreatureName> {
@@ -27,5 +26,4 @@ public class CreatureNameDAO extends DAO<CreatureName> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

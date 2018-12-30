@@ -27,5 +27,4 @@ public class CreatureDAO extends DAO<Creature> {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
