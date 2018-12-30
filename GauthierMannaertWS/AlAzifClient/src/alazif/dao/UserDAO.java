@@ -3,6 +3,7 @@ package alazif.dao;
 import alazif.javabean.User;
 
 public class UserDAO extends DAO<User> {
+	private String branchUrl=baseUrl+"user/";
 
 	@Override
 	public boolean create(User obj) {

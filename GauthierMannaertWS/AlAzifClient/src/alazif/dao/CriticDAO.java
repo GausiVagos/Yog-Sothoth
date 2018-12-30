@@ -3,6 +3,7 @@ package alazif.dao;
 import alazif.javabean.Critic;
 
 public class CriticDAO extends DAO<Critic> {
+	private String branchUrl=baseUrl+"critic/";
 
 	@Override
 	public boolean create(Critic obj) {

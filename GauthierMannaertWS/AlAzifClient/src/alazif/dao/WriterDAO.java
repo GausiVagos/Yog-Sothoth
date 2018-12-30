@@ -3,6 +3,7 @@ package alazif.dao;
 import alazif.javabean.Writer;
 
 public class WriterDAO extends DAO<Writer> {
+	private String branchUrl=baseUrl+"writer/";
 
 	@Override
 	public boolean create(Writer obj) {

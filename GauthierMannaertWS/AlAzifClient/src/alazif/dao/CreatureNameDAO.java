@@ -2,6 +2,7 @@ package alazif.dao;
 import alazif.javabean.CreatureName;
 
 public class CreatureNameDAO extends DAO<CreatureName> {
+	private String branchUrl=baseUrl+"creatureName/";
 
 	@Override
 	public boolean create(CreatureName obj) {
