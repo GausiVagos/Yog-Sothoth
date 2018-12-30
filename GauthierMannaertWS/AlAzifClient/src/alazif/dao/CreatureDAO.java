@@ -1,9 +1,7 @@
 package alazif.dao;
 
 import javax.ws.rs.core.MediaType;
-
 import org.codehaus.jackson.map.ObjectMapper;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -43,7 +41,6 @@ public class CreatureDAO extends DAO<Creature> {
 				.path(search)
 				.accept(MediaType.APPLICATION_JSON)
 				.get(String.class);
-
 		try
 		{
 			ObjectMapper mapper = new ObjectMapper();
