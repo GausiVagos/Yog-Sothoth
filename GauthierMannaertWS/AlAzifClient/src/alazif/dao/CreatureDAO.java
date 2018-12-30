@@ -34,6 +34,7 @@ public class CreatureDAO extends DAO<Creature> {
 
 	@Override
 	public Creature find(String search) {
+
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		WebResource service = client.resource(branchUrl);
