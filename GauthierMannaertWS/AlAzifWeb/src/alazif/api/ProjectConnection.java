@@ -12,7 +12,7 @@ public class ProjectConnection {
 		
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
-			String url = "jdbc:oracle:ojdbc8:char-oracle11.condorcet.be:1521:xe";
+			String url = "jdbc:oracle:thin:char-oracle11.condorcet.be:1521:xe";
 			String username = "simon3";
 			String password = "Simon";
 			instance = DriverManager.getConnection(url, username, password);
