@@ -11,7 +11,7 @@ public class ProjectConnection {
 	private ProjectConnection() {
 		
 		try {
-			Class.forName("oracle.jdbc.OracleDriver");
+			Class.forName("oracle.jdbc.driver.OracleDriver");
 			String url = "jdbc:oracle:thin:char-oracle11.condorcet.be:1521:xe";
 			String username = "simon3";
 			String password = "Simon";
