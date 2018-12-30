@@ -3,6 +3,7 @@ package alazif.dao;
 import alazif.javabean.Novel;
 
 public class NovelDAO extends DAO<Novel> {
+	private String branchUrl=baseUrl+"novel/";
 
 	@Override
 	public boolean create(Novel obj) {

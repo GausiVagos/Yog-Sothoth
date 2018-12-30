@@ -3,7 +3,7 @@ package alazif.dao;
 
 public abstract class DAO<T> 
 {	
-	protected static String baseUrl = "http://localhost:9090/NecroWEB/api/";
+	protected static String baseUrl = "http://localhost:9090/AlAzifWeb/api/";
 	
 	public DAO(){}
 	
