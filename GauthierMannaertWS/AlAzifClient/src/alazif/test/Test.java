@@ -40,6 +40,7 @@ public class Test {
 		WriterDAO wdao=new WriterDAO();
 		Writer w=wdao.find("");
 		System.out.println(w.getFirstName());
+		
 	}
 
 }

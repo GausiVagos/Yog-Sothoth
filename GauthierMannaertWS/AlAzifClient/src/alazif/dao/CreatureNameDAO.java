@@ -4,8 +4,7 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import alazif.javabean.CreatureName;
@@ -34,23 +33,18 @@ public class CreatureNameDAO extends DAO<CreatureName> {
 
 	@Override
 	public CreatureName find(String search) {
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		WebResource service = client.resource(branchUrl);
-		
-		String jsonAnswer = service
-				.path(search)
-				.accept(MediaType.APPLICATION_JSON)
-				.get(String.class);
-		try
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path(search).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+
+		if(cr.getStatus()==200)
 		{
-			ObjectMapper mapper = new ObjectMapper();
-			CreatureName creatureName = mapper.readValue(jsonAnswer, CreatureName.class);
-			return creatureName;
+			try
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				CreatureName creatureName = mapper.readValue(cr.getEntity(String.class), CreatureName.class);
+				return creatureName;
+			}
+			catch(Exception e){}
 		}
-		catch(Exception e)
-		{
-			return null;
-		}
+		return null;
 	}
 }

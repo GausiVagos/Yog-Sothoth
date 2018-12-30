@@ -1,10 +1,11 @@
 package alazif.dao;
 
 import javax.ws.rs.core.MediaType;
+
 import org.codehaus.jackson.map.ObjectMapper;
+
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import alazif.javabean.Creature;
@@ -32,24 +33,18 @@ public class CreatureDAO extends DAO<Creature> {
 
 	@Override
 	public Creature find(String search) {
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path(search).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		WebResource service = client.resource(branchUrl);
-		
-		String jsonAnswer = service
-				.path(search)
-				.accept(MediaType.APPLICATION_JSON)
-				.get(String.class);
-		try
+		if(cr.getStatus()==200)
 		{
-			ObjectMapper mapper = new ObjectMapper();
-			Creature creature = mapper.readValue(jsonAnswer, Creature.class);
-			return creature;
+			try
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				Creature creature = mapper.readValue(cr.getEntity(String.class), Creature.class);
+				return creature;
+			}
+			catch(Exception e){}
 		}
-		catch(Exception e)
-		{
-			return null;
-		}
+		return null;
 	}
 }

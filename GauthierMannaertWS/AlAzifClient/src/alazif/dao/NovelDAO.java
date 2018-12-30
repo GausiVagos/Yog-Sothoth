@@ -5,8 +5,7 @@ import javax.ws.rs.core.MediaType;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import alazif.javabean.Novel;
@@ -34,24 +33,19 @@ public class NovelDAO extends DAO<Novel> {
 
 	@Override
 	public Novel find(String search) {
-		ClientConfig config = new DefaultClientConfig();
-		Client client = Client.create(config);
-		WebResource service = client.resource(branchUrl);
-		
-		String jsonAnswer = service
-				.path(search)
-				.accept(MediaType.APPLICATION_JSON)
-				.get(String.class);
-		try
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path(search).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+
+		if(cr.getStatus()==200)
 		{
-			ObjectMapper mapper = new ObjectMapper();
-			Novel novel = mapper.readValue(jsonAnswer, Novel.class);
-			return novel;
+			try
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				Novel novel = mapper.readValue(cr.getEntity(String.class), Novel.class);
+				return novel;
+			}
+			catch(Exception e){}
 		}
-		catch(Exception e)
-		{
-			return null;
-		}
+		return null;
 	}
 
 }
