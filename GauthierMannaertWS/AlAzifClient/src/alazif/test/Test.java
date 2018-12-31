@@ -7,6 +7,7 @@ import alazif.dao.CreatureNameDAO;
 import alazif.dao.CriticDAO;
 import alazif.dao.NovelDAO;
 import alazif.dao.UserDAO;
+import alazif.dao.WriterDAO;
 import alazif.javabean.Creature;
 import alazif.javabean.CreatureName;
 import alazif.javabean.Critic;
@@ -18,6 +19,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		//Tests des DAO
+		/*
 		CreatureDAO cdao=new CreatureDAO();
 		Creature c=cdao.find("");
 		System.out.println(c.getDescription());
@@ -37,11 +39,10 @@ public class Test {
 		UserDAO udao=new UserDAO();
 		User u=udao.find("");
 		System.out.println(u.getUserName());
-		/*
+
 		WriterDAO wdao=new WriterDAO();
 		Writer w=wdao.find("");
 		System.out.println(w.getFirstName());
-		*/
 		
 		Creature test=new Creature("Test description",new Writer("Machin","Truc","Il a vécu."),new HashSet<Novel>(),new HashSet<CreatureName>());
 		cdao.create(test);
@@ -50,6 +51,11 @@ public class Test {
 		System.out.println(cdao.delete(test));
 		
 		System.out.println(ctdao.delete(new Critic(1,1,"",1)));
+		*/
+		
+		WriterDAO wdao=new WriterDAO();
+		Writer w=wdao.find("");
+		System.out.println(w.getFirstName());
 	}
 
 }
