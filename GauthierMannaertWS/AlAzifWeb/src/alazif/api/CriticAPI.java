@@ -1,6 +1,10 @@
 package alazif.api;
 
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -40,5 +44,33 @@ public class CriticAPI {
 		Critic[] all=null;
 		
 		return Response.status(Status.OK).entity(all).build();
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response add(Critic c)
+	{
+		//On l'ajoute ds la db
+		return Response.status(Status.CREATED).build();
+	}
+	
+	@Path("{user}/{novel}")
+	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response modify(@PathParam("user") int userId, @PathParam("novel") int novelId, Critic c)
+	{
+		//On le modifie ds la db
+		return Response.status(Status.OK).build();
+	}
+	
+	@Path("{user}/{novel}")
+	@DELETE
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response delete(@PathParam("user") int userId, @PathParam("novel") int novelId)
+	{
+		//On le supprime ds la db
+		return Response.status(Status.OK).build();
 	}
 }

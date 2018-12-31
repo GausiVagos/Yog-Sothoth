@@ -15,19 +15,53 @@ public class CriticDAO extends DAO<Critic> {
 
 	@Override
 	public boolean create(Critic obj) {
-		// TODO Auto-generated method stub
+		try
+		{
+			ObjectMapper mapper = new ObjectMapper();
+			String json=mapper.writeValueAsString(obj);
+			ClientResponse response = Client.create(new DefaultClientConfig()).resource(branchUrl)
+				    .type(MediaType.APPLICATION_JSON)
+				    .post(ClientResponse.class, json);
+			if(response.getStatus()==201)
+			{
+				return true;
+			}
+		}
+		catch(Exception e) {}
 		return false;
 	}
 
 	@Override
 	public boolean delete(Critic obj) {
-		// TODO Auto-generated method stub
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl)
+				.path(obj.getUserId()+"/"+obj.getNovelId())
+				.accept(MediaType.APPLICATION_JSON)
+				.delete(ClientResponse.class);
+
+		if(cr.getStatus()==200)
+		{
+			return true;
+		}
 		return false;
 	}
 
 	@Override
 	public boolean update(Critic obj) {
-		// TODO Auto-generated method stub
+		try
+		{
+			ObjectMapper mapper = new ObjectMapper();
+			String json=mapper.writeValueAsString(obj);
+			ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl)
+					.path(obj.getUserId()+"/"+obj.getNovelId())
+					.type(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON)
+					.put(ClientResponse.class,json);
+			if(cr.getStatus()==200)
+			{
+				return true;
+			}
+		}
+		catch(Exception e) {}
 		return false;
 	}
 
