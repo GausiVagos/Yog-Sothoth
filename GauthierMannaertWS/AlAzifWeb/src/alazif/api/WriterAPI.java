@@ -64,6 +64,22 @@ public class WriterAPI {
 		Writer w=new Writer();
 		w.setWriterId(id);
 		//On cherche ds la db selon id
+		CallableStatement addwri = null;
+		try {
+			addwri = conn.prepareCall("{? = call FindWriter(?)}");
+			
+			addwri.registerOutParameter(1, Types.OTHER);
+			addwri.setInt(2, w.getWriterId());
+
+			addwri.executeUpdate();
+			w = (Writer) addwri.getObject(1);
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		
 		return Response.status(Status.OK).entity(w).build();
 	}
 	

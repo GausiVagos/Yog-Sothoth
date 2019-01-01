@@ -19,7 +19,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		//Tests des DAO
-		
+		/*
 		CreatureDAO cdao=new CreatureDAO();
 		Creature c=cdao.find("");
 		System.out.println(c.getDescription());
@@ -51,12 +51,12 @@ public class Test {
 		System.out.println(cdao.delete(test));
 		
 		System.out.println(ctdao.delete(new Critic(1,1,"",1)));
-		
-		/*
-		WriterDAO wdao=new WriterDAO();
-		Writer w=wdao.find("1");
-		System.out.println(w.getFirstName());
 		*/
+		
+		WriterDAO wdao=new WriterDAO();
+		Writer w = new Writer();
+		w = wdao.find("1");
+		System.out.println(w.getFirstName());
 	}
 
 }
