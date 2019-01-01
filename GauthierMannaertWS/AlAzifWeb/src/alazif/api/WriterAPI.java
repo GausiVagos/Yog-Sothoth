@@ -84,6 +84,22 @@ public class WriterAPI {
 		//On l'ajoute ds la db
 		int id=999;
 		//On renvoie l'id nouvellement créé pour l'injecter dans l'objet
+		
+		CallableStatement addwri = null;
+		try {
+			addwri = conn.prepareCall("{call AddWriter(?, ?, ?)}");
+			
+			addwri.setString(1, w.getFirstName());
+			addwri.setString(2, w.getLastName());
+			addwri.setString(3, w.getBiography());
+
+			addwri.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.CREATED).entity("{\"id\":"+id+"}").build();
 	}
 	
