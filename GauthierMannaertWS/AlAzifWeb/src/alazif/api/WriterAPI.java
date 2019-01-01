@@ -3,6 +3,7 @@ package alazif.api;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -82,18 +83,20 @@ public class WriterAPI {
 	public Response add(Writer w)
 	{
 		//On l'ajoute ds la db
-		int id=999;
+		int id;
 		//On renvoie l'id nouvellement créé pour l'injecter dans l'objet
 		
 		CallableStatement addwri = null;
 		try {
-			addwri = conn.prepareCall("{call AddWriter(?, ?, ?)}");
+			addwri = conn.prepareCall("{? = call AddWriterV2(?, ?, ?)}");
 			
-			addwri.setString(1, w.getFirstName());
-			addwri.setString(2, w.getLastName());
-			addwri.setString(3, w.getBiography());
+			addwri.registerOutParameter(1, Types.INTEGER);
+			addwri.setString(2, w.getFirstName());
+			addwri.setString(3, w.getLastName());
+			addwri.setString(4, w.getBiography());
 
 			addwri.executeUpdate();
+			id = addwri.getInt(1);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
