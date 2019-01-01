@@ -61,18 +61,17 @@ public class WriterAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") int id)
 	{
-		Writer w=new Writer();
-		w.setWriterId(id);
+		String json;
 		//On cherche ds la db selon id
 		CallableStatement addwri = null;
 		try {
-			addwri = conn.prepareCall("{? = call FindWriter(?)}");
+			addwri = conn.prepareCall("{? = call FINDWRITERJSON(?)}");
 			
-			addwri.registerOutParameter(1, Types.OTHER);
-			addwri.setInt(2, w.getWriterId());
+			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.setInt(2, id);
 
 			addwri.executeUpdate();
-			w = (Writer) addwri.getObject(1);
+			json = addwri.getString(1);
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -80,7 +79,7 @@ public class WriterAPI {
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		
-		return Response.status(Status.OK).entity(w).build();
+		return Response.status(Status.OK).entity(json).build();
 	}
 	
 	@Path("all")
