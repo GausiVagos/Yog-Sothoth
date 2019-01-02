@@ -61,7 +61,7 @@ public class CriticAPI {
 		//On l'ajoute ds la db
 		CallableStatement addcri = null;
 		try {
-			addcri = conn.prepareCall("call AddCritic(?, ?, ?, ?)");
+			addcri = conn.prepareCall("{call AddCritic(?, ?, ?, ?)}");
 			
 			addcri.setInt(1, c.getUserId());
 			addcri.setInt(2, c.getNovelId());

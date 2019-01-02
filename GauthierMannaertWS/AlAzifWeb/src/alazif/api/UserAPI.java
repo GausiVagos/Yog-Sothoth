@@ -62,15 +62,22 @@ public class UserAPI {
 	{
 		//On l'ajoute ds la db
 		int id;
+		int adm;
 		//On renvoie l'id nouvellement créé pour l'injecter dans l'objet
 		CallableStatement adduser = null;
 		try {
-			adduser = conn.prepareCall("? = AddUser(?, ?, ?)");
+			adduser = conn.prepareCall("{? = call AddUser(?, ?, ?)}");
 			
 			adduser.registerOutParameter(1, Types.INTEGER);
 			adduser.setString(2, u.getUserName());
 			adduser.setString(3, u.getPassword());
-			adduser.setBoolean(4, u.getAdmin());
+			if(u.getAdmin() == true) {
+				adm = 1;
+			}
+			else {
+				adm = 0;
+			}
+			adduser.setInt(4, adm);
 			
 			adduser.executeUpdate();
 			id = adduser.getInt(1);

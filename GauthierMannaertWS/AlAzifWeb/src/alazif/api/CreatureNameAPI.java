@@ -65,7 +65,7 @@ public class CreatureNameAPI{
 		
 		CallableStatement addcrename = null;
 		try {
-			addcrename = conn.prepareCall("? = call AddCreatureName(?, ?)");
+			addcrename = conn.prepareCall("{? = call AddCreatureName(?, ?)}");
 			
 			addcrename.registerOutParameter(1, Types.INTEGER);
 			addcrename.setInt(2, numeroCre);

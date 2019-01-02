@@ -67,7 +67,7 @@ public class NovelAPI {
 		//On renvoie l'id nouvellement créé pour l'injecter dans l'objet
 		CallableStatement addnov = null;
 		try {
-			addnov = conn.prepareCall("? = call AdNovel(?, ?, ?, ?)");
+			addnov = conn.prepareCall("{? = call AddNovel(?, ?, ?, ?)}");
 			
 			addnov.registerOutParameter(1, Types.INTEGER);
 			addnov.setString(2, n.getTitle());

@@ -66,11 +66,11 @@ public class CreatureAPI {
 		int id;
 		CallableStatement addcre = null;
 		try {
-			addcre = conn.prepareCall("? = call AddCreature(?, ?)");
+			addcre = conn.prepareCall("{? = call AddCreature(?, ?)}");
 			
 			addcre.registerOutParameter(1,  Types.INTEGER);
 			addcre.setString(2, c.getDescription());
-			addcre.setInt(3, c.getCreatureId());
+			addcre.setInt(3, c.getFirstWriter().getWriterId());
 			
 			addcre.executeUpdate();
 			id = addcre.getInt(1);
