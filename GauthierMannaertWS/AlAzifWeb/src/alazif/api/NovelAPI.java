@@ -26,7 +26,7 @@ public class NovelAPI {
 	public Response no()
 	{
 		//int novelId, String title, int year, Writer writer, String synopsis, Set<Critic> setOfCritics, Set<Creature> setOfCreatures
-		Novel defaultValue=new Novel(0,"Vide",0,new Writer(0,"NoName","NoName", "Aucune donnée"),"Pas grand chose",new HashSet<Critic>(),new HashSet<Creature>());
+		Novel defaultValue=new Novel(0,"Vide",0,new Writer(0,"NoName","NoName", "Aucune donnée"),"Pas grand chose",new HashSet<Critic>());
 		return Response.status(Status.OK).entity(defaultValue).build();
 	}
 	

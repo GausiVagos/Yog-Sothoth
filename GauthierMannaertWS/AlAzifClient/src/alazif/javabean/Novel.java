@@ -14,24 +14,22 @@ public class Novel implements Serializable{
 	private Writer writer;
 	private String synopsis;
 	private Set<Critic> setOfCritics;
-	private Set<Creature> setOfCreatures;
 	
 	//constructeurs
 	
 	public Novel() {}
 	
-	public Novel(String title, int year, Writer writer, String synopsis, Set<Critic> setOfCritics, Set<Creature> setOfCreatures) {
+	public Novel(String title, int year, Writer writer, String synopsis, Set<Critic> setOfCritics) {
 		this.novelId = 0;
 		this.title = title;
 		this.year = year;
 		this.writer=writer;
 		this.synopsis=synopsis;
 		this.setOfCritics = setOfCritics;
-		this.setOfCreatures = setOfCreatures;
 	}
 	
-	public Novel(int novelId, String title, int year, Writer writer, String synopsis, Set<Critic> setOfCritics, Set<Creature> setOfCreatures) {
-		this(title, year, writer, synopsis, setOfCritics, setOfCreatures);
+	public Novel(int novelId, String title, int year, Writer writer, String synopsis, Set<Critic> setOfCritics) {
+		this(title, year, writer, synopsis, setOfCritics);
 		this.novelId = novelId;
 	}
 	
@@ -60,10 +58,6 @@ public class Novel implements Serializable{
 	public Set<Critic> getSetOfCritics() {
 		return this.setOfCritics;
 	}
-
-	public Set<Creature> getSetOfCreatures() {
-		return this.setOfCreatures;
-	}
 	
 	//setters
 
@@ -90,10 +84,6 @@ public class Novel implements Serializable{
 	public void setSetOfCritics(Set<Critic> setOfCritics) {
 		this.setOfCritics = setOfCritics;
 	}
-
-	public void setSetOfCreatures(Set<Creature> setOfCreatures) {
-		this.setOfCreatures = setOfCreatures;
-	}
 	
 	//Méthodes de Sets
 	
@@ -102,18 +92,8 @@ public class Novel implements Serializable{
 			setOfCritics.add(c);
 	}
 	
-	public void AddCreature(Creature c) {
-		//if(!setOfCreatures.contains(c))
-			setOfCreatures.add(c);
-	}
-	
 	public void DeleteCritic(Critic c) {
 		//if(setOfCritics.contains(c))
 			setOfCritics.remove(c);
-	}
-	
-	public void DeleteCreature(Creature c) {
-		//if(setOfCreatures.contains(c))
-			setOfCreatures.remove(c);
 	}
 }
