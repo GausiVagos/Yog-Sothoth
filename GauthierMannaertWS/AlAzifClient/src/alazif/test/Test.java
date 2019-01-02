@@ -55,8 +55,8 @@ public class Test {
 		
 		WriterDAO wdao=new WriterDAO();
 		Writer w;
-		w = wdao.find("2");
-		System.out.println(w.getFirstName());
+		w = wdao.find("1");
+		System.out.println(w.getFirstName()+" "+w.getLastName());
 	}
 
 }

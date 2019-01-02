@@ -32,30 +32,6 @@ public class WriterAPI {
 		return Response.status(Status.OK).entity(defaultValue).build();
 	}
 	
-	@Path("addWriter/{firstname}/{lastname}/{biography}")
-	@GET
-	@Produces(MediaType.TEXT_PLAIN)
-	public String addWriter(@PathParam("firstname") String firstname, @PathParam("lastname") String lastname, @PathParam("biography") String biography) {
-		
-		CallableStatement addwri = null;
-		try {
-			addwri = conn.prepareCall("{call AddWriter(?, ?, ?)}");
-			
-			addwri.setString(1, firstname);
-			addwri.setString(2, lastname);
-			addwri.setString(3, biography);
-
-			addwri.executeUpdate();
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "false";
-		}
-		
-		return "true";
-	}
-	
 	@Path("{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -65,7 +41,7 @@ public class WriterAPI {
 		//On cherche ds la db selon id
 		CallableStatement addwri = null;
 		try {
-			addwri = conn.prepareCall("{? = call FINDWRITERJSON(?)}");
+			addwri = conn.prepareCall("{? = call FINDWRITER(?)}");
 			
 			addwri.registerOutParameter(1, Types.VARCHAR);
 			addwri.setInt(2, id);
@@ -103,7 +79,7 @@ public class WriterAPI {
 		
 		CallableStatement addwri = null;
 		try {
-			addwri = conn.prepareCall("{? = call AddWriterV2(?, ?, ?)}");
+			addwri = conn.prepareCall("{? = call AddWriter(?, ?, ?)}");
 			
 			addwri.registerOutParameter(1, Types.INTEGER);
 			addwri.setString(2, w.getFirstName());
