@@ -53,7 +53,7 @@ public class CreatureNameAPI{
 		return Response.status(Status.OK).entity(all).build();
 	}
 	
-	@Path("creatureId")
+	@Path("{creatureId}")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
