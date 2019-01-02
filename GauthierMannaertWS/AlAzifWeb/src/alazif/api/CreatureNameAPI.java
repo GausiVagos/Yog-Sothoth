@@ -53,10 +53,11 @@ public class CreatureNameAPI{
 		return Response.status(Status.OK).entity(all).build();
 	}
 	
+	@Path("creatureId")
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response add(CreatureName c, int numeroCre)
+	public Response add(CreatureName c, @PathParam("creatureId") int numeroCre)
 	{
 		//On l'ajoute ds la db
 		int id;
