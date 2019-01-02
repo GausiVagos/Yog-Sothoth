@@ -1,5 +1,9 @@
 package alazif.api;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.HashSet;
 
 import javax.ws.rs.Consumes;
@@ -19,6 +23,9 @@ import alazif.pojos.User;
 
 @Path("user")
 public class UserAPI {
+	
+	Connection conn = ProjectConnection.getInstance();
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response no()
@@ -54,8 +61,24 @@ public class UserAPI {
 	public Response add(User u)
 	{
 		//On l'ajoute ds la db
-		int id=999;
+		int id;
 		//On renvoie l'id nouvellement créé pour l'injecter dans l'objet
+		CallableStatement adduser = null;
+		try {
+			adduser = conn.prepareCall("? = AddUser(?, ?, ?)");
+			
+			adduser.registerOutParameter(1, Types.INTEGER);
+			adduser.setString(2, u.getUserName());
+			adduser.setString(3, u.getPassword());
+			adduser.setBoolean(4, u.getAdmin());
+			
+			adduser.executeUpdate();
+			id = adduser.getInt(1);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.CREATED).entity("{\"id\":"+id+"}").build();
 	}
 	
