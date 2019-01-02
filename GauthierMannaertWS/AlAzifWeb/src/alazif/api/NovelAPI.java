@@ -1,5 +1,9 @@
 package alazif.api;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.HashSet;
 
 import javax.ws.rs.Consumes;
@@ -14,13 +18,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import alazif.pojos.Creature;
 import alazif.pojos.Critic;
 import alazif.pojos.Novel;
 import alazif.pojos.Writer;
 
 @Path("novel")
 public class NovelAPI {
+	
+	Connection conn = ProjectConnection.getInstance();
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response no()
@@ -57,8 +63,25 @@ public class NovelAPI {
 	public Response add(Novel n)
 	{
 		//On l'ajoute ds la db
-		int id=999;
+		int id;
 		//On renvoie l'id nouvellement créé pour l'injecter dans l'objet
+		CallableStatement addnov = null;
+		try {
+			addnov = conn.prepareCall("? = call AdNovel(?, ?, ?, ?)");
+			
+			addnov.registerOutParameter(1, Types.INTEGER);
+			addnov.setString(2, n.getTitle());
+			addnov.setInt(3, n.getYear());
+			addnov.setInt(4, n.getWriter().getWriterId());
+			addnov.setString(5, n.getSynopsis());
+			
+			addnov.executeUpdate();
+			id = addnov.getInt(1);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.CREATED).entity("{\"id\":"+id+"}").build();
 	}
 	
