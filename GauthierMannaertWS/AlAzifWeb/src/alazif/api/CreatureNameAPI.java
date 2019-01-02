@@ -1,5 +1,10 @@
 package alazif.api;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Types;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,6 +21,9 @@ import alazif.pojos.CreatureName;
 
 @Path("creatureName")
 public class CreatureNameAPI{
+	
+	Connection conn = ProjectConnection.getInstance();
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response no()
@@ -48,11 +56,27 @@ public class CreatureNameAPI{
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response add(CreatureName c)
+	public Response add(CreatureName c, int numeroCre)
 	{
 		//On l'ajoute ds la db
-		int id=999;
+		int id;
 		//On renvoie l'id nouvellement créé pour l'injecter dans l'objet
+		
+		CallableStatement addcrename = null;
+		try {
+			addcrename = conn.prepareCall("? = call AddCreatureName(?, ?)");
+			
+			addcrename.registerOutParameter(1, Types.INTEGER);
+			addcrename.setInt(2, numeroCre);
+			addcrename.setString(3, c.getName());
+			
+			addcrename.executeUpdate();
+			id = addcrename.getInt(1);
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.CREATED).entity("{\"id\":"+id+"}").build();
 	}
 	
