@@ -38,7 +38,7 @@ public class WriterAPI {
 	public Response getById(@PathParam("id") int id)
 	{
 		String json;
-		//On cherche ds la db selon id
+		
 		CallableStatement addwri = null;
 		try {
 			addwri = conn.prepareCall("{? = call FINDWRITER(?)}");
@@ -50,7 +50,6 @@ public class WriterAPI {
 			json = addwri.getString(1);
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}

@@ -8,6 +8,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
+import alazif.javabean.Creature;
 import alazif.javabean.CreatureName;
 
 
@@ -16,11 +17,16 @@ public class CreatureNameDAO extends DAO<CreatureName> {
 
 	@Override
 	public boolean create(CreatureName obj) {
+		return false;
+	}
+	
+	public boolean create(CreatureName obj, Creature c) {
 		try
 		{
 			ObjectMapper mapper = new ObjectMapper();
 			String json=mapper.writeValueAsString(obj);
 			ClientResponse response = Client.create(new DefaultClientConfig()).resource(branchUrl)
+					.path(Integer.toString(c.getCreatureId()))
 				    .type(MediaType.APPLICATION_JSON)
 				    .post(ClientResponse.class, json);
 			if(response.getStatus()==201)

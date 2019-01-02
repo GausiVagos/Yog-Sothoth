@@ -39,10 +39,24 @@ public class UserAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") int id)
 	{
-		User u=new User();
-		u.setUserId(id);
-		//On cherche ds la db selon id
-		return Response.status(Status.OK).entity(u).build();
+		String json;
+		
+		CallableStatement addwri = null;
+		try {
+			addwri = conn.prepareCall("{? = call FINDUSER(?)}");
+			
+			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.setInt(2, id);
+
+			addwri.executeUpdate();
+			json = addwri.getString(1);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		
+		return Response.status(Status.OK).entity(json).build();
 	}
 	
 	@Path("all")

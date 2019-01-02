@@ -3,6 +3,7 @@ package alazif.api;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -36,11 +37,25 @@ public class CriticAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("user") int userId, @PathParam("novel") int novelId)
 	{
-		Critic c=new Critic();
-		c.setUserId(userId);
-		c.setNovelId(novelId);
-		//On cherche ds la db selon id
-		return Response.status(Status.OK).entity(c).build();
+		String json;
+		
+		CallableStatement addwri = null;
+		try {
+			addwri = conn.prepareCall("{? = call FINDCRITIC(?,?)}");
+			
+			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.setInt(2, userId);
+			addwri.setInt(3, novelId);
+
+			addwri.executeUpdate();
+			json = addwri.getString(1);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		
+		return Response.status(Status.OK).entity(json).build();
 	}
 	
 	@Path("all")
