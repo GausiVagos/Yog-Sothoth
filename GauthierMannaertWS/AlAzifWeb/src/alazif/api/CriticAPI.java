@@ -1,5 +1,9 @@
 package alazif.api;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,6 +20,9 @@ import alazif.pojos.Critic;
 
 @Path("critic")
 public class CriticAPI {
+	
+	Connection conn = ProjectConnection.getInstance();
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response no()
@@ -52,6 +59,21 @@ public class CriticAPI {
 	public Response add(Critic c)
 	{
 		//On l'ajoute ds la db
+		CallableStatement addcri = null;
+		try {
+			addcri = conn.prepareCall("call AddCritic(?, ?, ?, ?)");
+			
+			addcri.setInt(1, c.getUserId());
+			addcri.setInt(2, c.getNovelId());
+			addcri.setFloat(3, c.getRating());
+			addcri.setString(4, c.getCommentary());
+			
+			addcri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.CREATED).build();
 	}
 	
