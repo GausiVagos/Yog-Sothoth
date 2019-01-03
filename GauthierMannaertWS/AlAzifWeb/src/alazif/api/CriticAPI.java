@@ -99,6 +99,21 @@ public class CriticAPI {
 	public Response modify(@PathParam("user") int userId, @PathParam("novel") int novelId, Critic c)
 	{
 		//On le modifie ds la db
+		CallableStatement modcri = null;
+		try {
+			modcri = conn.prepareCall("{call UpdateCritic(?, ?, ?, ?)}");
+			
+			modcri.setInt(1, c.getUserId());
+			modcri.setInt(2, c.getNovelId());
+			modcri.setFloat(3, c.getRating());
+			modcri.setString(4, c.getCommentary());
+			
+			modcri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 	
@@ -108,6 +123,19 @@ public class CriticAPI {
 	public Response delete(@PathParam("user") int userId, @PathParam("novel") int novelId)
 	{
 		//On le supprime ds la db
+		CallableStatement delcri = null;
+		try {
+			delcri = conn.prepareCall("{call DeleteCritic(?, ?)}");
+			
+			delcri.setInt(1, userId);
+			delcri.setInt(2, novelId);
+			
+			delcri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 }

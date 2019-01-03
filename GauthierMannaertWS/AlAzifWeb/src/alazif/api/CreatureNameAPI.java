@@ -102,6 +102,20 @@ public class CreatureNameAPI{
 	public Response modify(@PathParam("id") int id, CreatureName c)
 	{
 		//On le modifie ds la db
+		CallableStatement modcn = null;
+		try {
+			modcn = conn.prepareCall("{call UpdateCreatureName(?, ?, ?)}");
+			
+			modcn.setInt(1, c.getCreatureNameId());
+			modcn.setInt(2, id);//id de creature
+			modcn.setString(3, c.getName());
+			
+			modcn.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 	
@@ -111,6 +125,18 @@ public class CreatureNameAPI{
 	public Response delete(@PathParam("id") int id)
 	{
 		//On le supprime ds la db
+		CallableStatement delcn = null;
+		try {
+			delcn = conn.prepareCall("{call DeleteCreatureName(?)}");
+			
+			delcn.setInt(1, id);
+			
+			delcn.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 }

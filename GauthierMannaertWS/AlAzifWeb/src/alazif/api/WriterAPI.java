@@ -100,9 +100,25 @@ public class WriterAPI {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response modify(@PathParam("id") int id, Writer u)
+	public Response modify(@PathParam("id") int id, Writer w)
 	{
 		//On le modifie ds la db
+		CallableStatement modwri = null;
+		
+		try {
+			modwri = conn.prepareCall("{call UpdateWriter(?, ?, ?, ?)}");
+			
+			modwri.setInt(1, w.getWriterId());
+			modwri.setString(2, w.getFirstName());
+			modwri.setString(3, w.getLastName());
+			modwri.setString(4, w.getBiography());
+			
+			modwri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 	
@@ -112,6 +128,19 @@ public class WriterAPI {
 	public Response delete(@PathParam("id") int id)
 	{
 		//On le supprime ds la db
+		CallableStatement delwri = null;
+		
+		try {
+			delwri = conn.prepareCall("{call DeleteWriter(?)}");
+			
+			delwri.setInt(1, id);
+			
+			delwri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 }

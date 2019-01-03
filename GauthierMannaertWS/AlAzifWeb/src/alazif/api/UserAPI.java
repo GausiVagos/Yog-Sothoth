@@ -110,6 +110,28 @@ public class UserAPI {
 	public Response modify(@PathParam("id") int id, User u)
 	{
 		//On le modifie ds la db
+		int adm;
+		CallableStatement moduser = null;
+		try {
+			moduser = conn.prepareCall("{call UpdateUser(?, ?, ?, ?)}");
+			
+			moduser.setInt(1, u.getUserId());
+			moduser.setString(2, u.getUserName());
+			moduser.setString(3, u.getPassword());
+			if(u.getAdmin() == true) {
+				adm = 1;
+			}
+			else {
+				adm = 0;
+			}
+			moduser.setInt(4, adm);
+			
+			moduser.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 	
@@ -119,6 +141,18 @@ public class UserAPI {
 	public Response delete(@PathParam("id") int id)
 	{
 		//On le supprime ds la db
+		CallableStatement deluser = null;
+		try {
+			deluser = conn.prepareCall("{call DeleteUser(?)}");
+			
+			deluser.setInt(1, id);
+			
+			deluser.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 }

@@ -106,6 +106,22 @@ String json;
 	public Response modify(@PathParam("id") int id, Novel n)
 	{
 		//On le modifie ds la db
+		CallableStatement modnov = null;
+		try {
+			modnov = conn.prepareCall("{call UpdateNovel(?, ?, ?, ?, ?)}");
+			
+			modnov.setInt(1, n.getNovelId());
+			modnov.setString(2, n.getTitle());
+			modnov.setInt(3, n.getYear());
+			modnov.setInt(4, n.getWriter().getWriterId());
+			modnov.setString(5, n.getSynopsis());
+			
+			modnov.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 	
@@ -115,6 +131,18 @@ String json;
 	public Response delete(@PathParam("id") int id)
 	{
 		//On le supprime ds la db
+		CallableStatement delnov = null;
+		try {
+			delnov = conn.prepareCall("{call DeleteNovel(?)}");
+			
+			delnov.setInt(1, id);
+			
+			delnov.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 }
