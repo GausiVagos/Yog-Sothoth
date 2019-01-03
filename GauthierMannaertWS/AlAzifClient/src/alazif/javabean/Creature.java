@@ -76,19 +76,33 @@ public class Creature implements Serializable{
 	
 	//Méthodes des sets
 	
-	public void AddNovel(Novel n) {
+	public void addNovel(Novel n) {
 		setOfNovels.add(n);
 	}
 	
-	public void AddName(CreatureName c) {
+	public void addName(CreatureName c) {
 		setOfNames.add(c);
 	}
 	
-	public void DeleteNovel(Novel n) {
-		setOfNovels.remove(n);
+	public void deleteNovel(Novel n) {
+		for(Novel nov : setOfNovels)
+		{
+			if(nov.getNovelId()==n.getNovelId())
+			{
+				setOfNovels.remove(n);
+				break;
+			}			
+		}
 	}
 	
-	public void DeleteName(CreatureName c) {
-		setOfNames.remove(c);
+	public void deleteName(CreatureName c) {
+		for(CreatureName cn : setOfNames)
+		{
+			if(cn.getCreatureNameId()==c.getCreatureNameId())
+			{
+				setOfNames.remove(c);
+				break;
+			}
+		}
 	}
 }

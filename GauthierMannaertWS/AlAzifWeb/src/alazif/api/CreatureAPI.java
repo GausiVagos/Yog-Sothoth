@@ -98,7 +98,7 @@ public class CreatureAPI {
 			{
 				for(Novel n : c.getSetOfNovels())
 				{
-					CallableStatement addapp=conn.prepareCall("{call addappearance(?, ?)}");
+					CallableStatement addapp=conn.prepareCall("{call ADDAPPEARANCE(?, ?)}");
 					addapp.setInt(1, n.getNovelId());
 					addapp.setInt(2, c.getCreatureId());
 					addapp.executeUpdate();
