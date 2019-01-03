@@ -89,7 +89,7 @@ public class Creature implements Serializable{
 		{
 			if(nov.getNovelId()==n.getNovelId())
 			{
-				setOfNovels.remove(n);
+				setOfNovels.remove(nov);
 				break;
 			}			
 		}
@@ -100,7 +100,7 @@ public class Creature implements Serializable{
 		{
 			if(cn.getCreatureNameId()==c.getCreatureNameId())
 			{
-				setOfNames.remove(c);
+				setOfNames.remove(cn);
 				break;
 			}
 		}

@@ -19,7 +19,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import alazif.pojos.Creature;
@@ -100,8 +99,20 @@ public class CreatureAPI {
 				{
 					CallableStatement addapp=conn.prepareCall("{call ADDAPPEARANCE(?, ?)}");
 					addapp.setInt(1, n.getNovelId());
-					addapp.setInt(2, c.getCreatureId());
+					addapp.setInt(2, id);
 					addapp.executeUpdate();
+				}
+			}
+			//Ajout des noms éventuels
+			if(!c.getSetOfNames().isEmpty())
+			{
+				for(CreatureName cn : c.getSetOfNames())
+				{
+					CallableStatement addname=conn.prepareCall("{? = call ADDCREATURENAME(?, ?)}");
+					addname.registerOutParameter(1, Types.INTEGER);
+					addname.setInt(2, id);
+					addname.setString(3, cn.getName());
+					addname.executeUpdate();
 				}
 			}
 		}
@@ -174,14 +185,68 @@ public class CreatureAPI {
 						found=true;
 						break;
 					}
-					if(!found)
+				}
+				if(!found)
+				{
+					//Si une info est dans la db mais pas dans l'objet, on la supprime
+					CallableStatement delapp=conn.prepareCall("{call DELETEAPPEARANCE(?, ?)}");
+					delapp.setInt(1, (Integer)i);
+					delapp.setInt(2, c.getCreatureId());
+					delapp.executeUpdate();
+				}
+			}
+			
+			//Comparaison des noms
+			
+			CallableStatement getnames=conn.prepareCall("{? = call getnames(?)}");
+			getnames.registerOutParameter(1, Types.VARCHAR);
+			getnames.setInt(2, c.getCreatureId());
+			getnames.executeUpdate();
+			
+			list=getnames.getString(1);
+			Set namesIds= mapper.readValue(list.getBytes(), Set.class);
+			
+			//Ajout des nouveaux
+			for(CreatureName cn : c.getSetOfNames())
+			{
+				boolean found=false;
+				for(Object i : namesIds)
+				{
+					if(cn.getCreatureNameId()==(Integer)i)
 					{
-						//Si une info est dans la db mais pas dans l'objet, on la supprime
-						CallableStatement delapp=conn.prepareCall("{call deleteappearance(?, ?)}");
-						delapp.setInt(1, n.getNovelId());
-						delapp.setInt(2, c.getCreatureId());
-						delapp.executeUpdate();
+						found=true;
+						break;
 					}
+				}
+				if(!found)
+				{
+					//Si une info n'est pas trouvée ds la DB, on l'ajoute
+					CallableStatement addname=conn.prepareCall("{? = call addcreaturename(?, ?)}");
+					addname.registerOutParameter(1, Types.INTEGER);
+					addname.setInt(2, id);
+					addname.setString(3, cn.getName());
+					addname.executeUpdate();
+				}
+			}
+			
+			//Suppression des obsolètes
+			for(Object i : namesIds)
+			{
+				boolean found=false;
+				for(Novel n : c.getSetOfNovels())
+				{
+					if(n.getNovelId()==(Integer)i)
+					{
+						found=true;
+						break;
+					}
+				}
+				if(!found)
+				{
+					//Si une info est dans la db mais pas dans l'objet, on la supprime
+					CallableStatement delnam=conn.prepareCall("{call DELETECREATURENAME(?)}");
+					delnam.setInt(1, (Integer)i);
+					delnam.executeUpdate();
 				}
 			}
 		}

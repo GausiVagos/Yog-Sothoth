@@ -1,28 +1,25 @@
 package alazif.apitest;
 
-import alazif.api.CreatureNameAPI;
+import java.util.HashSet;
+import java.util.Set;
+
+import alazif.pojos.Creature;
 import alazif.pojos.CreatureName;
+import alazif.pojos.Novel;
+import alazif.pojos.Writer;
 
 public class Test {
 
 	public static void main(String[] args) 
 	{
-		/*
-		WriterAPI wapi = new WriterAPI();
-		Writer w = new Writer();
-		wapi.getById(1);
-		System.out.println(w.getFirstName());
-		
-		UserAPI uapi = new UserAPI();
-		User u = new User("Antoine", "azerty", true, null);
-		uapi.add(u);
-		System.out.println(u.getUserId());
-		*/
-		
-		CreatureName cn = new CreatureName("Testosaure");
-		CreatureNameAPI cnapi = new CreatureNameAPI();
-		cnapi.add(cn, 5);
-		System.out.println(cn.getCreatureNameId());
+		Set<Novel> novels = new HashSet<Novel>();
+		novels.add(new Novel(1, null, 0, null, null, null));
+		novels.add(new Novel(2, null, 0, null, null, null));
+		Set<CreatureName> names=new HashSet<CreatureName>();
+		names.add(new CreatureName("Bobby"));
+		names.add(new CreatureName("Bobby l'invincible"));
+		Creature bobby = new Creature("Salut, moi c'est Bobby.", new Writer(1,"", null, null), novels, names);
+		//System.out.println(cdao.create(bobby));
 	}
 
 }
