@@ -233,9 +233,9 @@ public class CreatureAPI {
 			for(Object i : namesIds)
 			{
 				boolean found=false;
-				for(Novel n : c.getSetOfNovels())
+				for(CreatureName cn : c.getSetOfNames())
 				{
-					if(n.getNovelId()==(Integer)i)
+					if(cn.getCreatureNameId()==(Integer)i)
 					{
 						found=true;
 						break;
