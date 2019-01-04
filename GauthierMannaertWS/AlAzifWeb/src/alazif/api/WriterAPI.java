@@ -2,6 +2,7 @@ package alazif.api;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import alazif.pojos.Writer;
+import oracle.jdbc.driver.OracleTypes;
 
 @Path("writer")
 public class WriterAPI {
@@ -37,24 +39,35 @@ public class WriterAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") int id)
 	{
-		String json;
+		Writer w = new Writer();;
 		
 		CallableStatement addwri = null;
+		ResultSet res = null;
 		try {
-			addwri = conn.prepareCall("{? = call FINDWRITER(?)}");
+			addwri = conn.prepareCall("{? = call findById.findWriter(?)}");
 			
-			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, id);
 
-			addwri.executeUpdate();
-			json = addwri.getString(1);
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res.next()) {
+				w.setWriterId(res.getInt("writerId"));
+				w.setFirstName(res.getString("firstName"));
+				w.setLastName(res.getString("lastName"));
+				w.setBiography(res.getString("biography"));
+			}
+			
+			addwri.close();
+			res.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		
-		return Response.status(Status.OK).entity(json).build();
+		return Response.status(Status.OK).entity(w).build();
 	}
 	
 	@Path("all")
@@ -69,7 +82,6 @@ public class WriterAPI {
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response add(Writer w)
 	{
 		//On l'ajoute ds la db
@@ -99,7 +111,6 @@ public class WriterAPI {
 	@Path("{id}")
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response modify(@PathParam("id") int id, Writer w)
 	{
 		//On le modifie ds la db
@@ -124,7 +135,6 @@ public class WriterAPI {
 	
 	@Path("{id}")
 	@DELETE
-	@Produces(MediaType.APPLICATION_JSON)
 	public Response delete(@PathParam("id") int id)
 	{
 		//On le supprime ds la db

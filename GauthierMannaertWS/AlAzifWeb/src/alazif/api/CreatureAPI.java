@@ -2,10 +2,10 @@ package alazif.api;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -19,12 +19,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import alazif.pojos.Creature;
 import alazif.pojos.CreatureName;
 import alazif.pojos.Novel;
 import alazif.pojos.Writer;
+import oracle.jdbc.OracleTypes;
 
 @Path("creature")
 public class CreatureAPI {
@@ -44,24 +43,72 @@ public class CreatureAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") int id)
 	{
-		String json;
-		
+		Creature c = new Creature();
+		Writer w = new Writer();
 		CallableStatement addwri = null;
+		ResultSet res = null;
 		try {
-			addwri = conn.prepareCall("{? = call FINDCREATURE(?)}");
+			addwri = conn.prepareCall("{? = call findById.findCreature(?)}");
 			
-			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, id);
 
-			addwri.executeUpdate();
-			json = addwri.getString(1);
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
 			
+			if(res.next()) {
+				c.setCreatureId(res.getInt("creatureId"));
+				c.setDescription(res.getString("description"));
+				w.setWriterId(res.getInt("writerId"));
+			}
+			
+			addwri.close();
+			res.close();
+			
+			addwri = conn.prepareCall("{? = call findById.findWriter(?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, w.getWriterId());
+
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res.next()) {
+				w.setFirstName(res.getString("firstName"));
+				w.setLastName(res.getString("lastName"));
+				w.setBiography(res.getString("biography"));
+				c.setFirstWriter(w);
+			}
+			
+			addwri.close();
+			res.close();
+			/*
+			addwri = conn.prepareCall("{? = findById.findNames(?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, id);
+			
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					c.AddName(new CreatureName(res.getInt("creatureNameId"), res.getString("name")));
+				}
+			}
+			else {
+				c.setSetOfNames(null);
+			}
+			
+			addwri.close();
+			res.close();
+			*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		
-		return Response.status(Status.OK).entity(json).build();
+		return Response.status(Status.OK).entity(c).build();
 	}
 	
 	@Path("all")
@@ -85,7 +132,7 @@ public class CreatureAPI {
 		try {
 			addcre = conn.prepareCall("{? = call AddCreature(?, ?)}");
 			
-			addcre.registerOutParameter(1,  Types.INTEGER);
+			addcre.registerOutParameter(1, Types.INTEGER);
 			addcre.setString(2, c.getDescription());
 			addcre.setInt(3, c.getFirstWriter().getWriterId());
 			
@@ -142,113 +189,6 @@ public class CreatureAPI {
 			
 			modcre.executeUpdate();
 			
-			//Comparaison des apparitions
-			CallableStatement getapp=conn.prepareCall("{? = call getappearances(?)}");
-			getapp.registerOutParameter(1, Types.VARCHAR);
-			getapp.setInt(2, c.getCreatureId());
-			getapp.executeUpdate();
-			
-			String list=getapp.getString(1);
-			ObjectMapper mapper = new ObjectMapper();
-			Set novelIds= mapper.readValue(list.getBytes(), Set.class);
-			
-			//Ajout des nouveaux
-			for(Novel n : c.getSetOfNovels())
-			{
-				boolean found=false;
-				for(Object i : novelIds)
-				{
-					if(n.getNovelId()==(Integer)i)
-					{
-						found=true;
-						break;
-					}
-				}
-				if(!found)
-				{
-					//Si une info n'est pas trouvée ds la DB, on l'ajoute
-					CallableStatement addapp=conn.prepareCall("{call addappearance(?, ?)}");
-					addapp.setInt(1, n.getNovelId());
-					addapp.setInt(2, c.getCreatureId());
-					addapp.executeUpdate();
-				}
-			}
-			
-			//Suppression des obsolètes
-			for(Object i : novelIds)
-			{
-				boolean found=false;
-				for(Novel n : c.getSetOfNovels())
-				{
-					if(n.getNovelId()==(Integer)i)
-					{
-						found=true;
-						break;
-					}
-				}
-				if(!found)
-				{
-					//Si une info est dans la db mais pas dans l'objet, on la supprime
-					CallableStatement delapp=conn.prepareCall("{call DELETEAPPEARANCE(?, ?)}");
-					delapp.setInt(1, (Integer)i);
-					delapp.setInt(2, c.getCreatureId());
-					delapp.executeUpdate();
-				}
-			}
-			
-			//Comparaison des noms
-			
-			CallableStatement getnames=conn.prepareCall("{? = call getnames(?)}");
-			getnames.registerOutParameter(1, Types.VARCHAR);
-			getnames.setInt(2, c.getCreatureId());
-			getnames.executeUpdate();
-			
-			list=getnames.getString(1);
-			Set namesIds= mapper.readValue(list.getBytes(), Set.class);
-			
-			//Ajout des nouveaux
-			for(CreatureName cn : c.getSetOfNames())
-			{
-				boolean found=false;
-				for(Object i : namesIds)
-				{
-					if(cn.getCreatureNameId()==(Integer)i)
-					{
-						found=true;
-						break;
-					}
-				}
-				if(!found)
-				{
-					//Si une info n'est pas trouvée ds la DB, on l'ajoute
-					CallableStatement addname=conn.prepareCall("{? = call addcreaturename(?, ?)}");
-					addname.registerOutParameter(1, Types.INTEGER);
-					addname.setInt(2, id);
-					addname.setString(3, cn.getName());
-					addname.executeUpdate();
-				}
-			}
-			
-			//Suppression des obsolètes
-			for(Object i : namesIds)
-			{
-				boolean found=false;
-				for(CreatureName cn : c.getSetOfNames())
-				{
-					if(cn.getCreatureNameId()==(Integer)i)
-					{
-						found=true;
-						break;
-					}
-				}
-				if(!found)
-				{
-					//Si une info est dans la db mais pas dans l'objet, on la supprime
-					CallableStatement delnam=conn.prepareCall("{call DELETECREATURENAME(?)}");
-					delnam.setInt(1, (Integer)i);
-					delnam.executeUpdate();
-				}
-			}
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
@@ -274,6 +214,24 @@ public class CreatureAPI {
 			delcre.setInt(1, id);
 			
 			delcre.executeUpdate();
+			
+			delcre.close();
+			
+			delcre = conn.prepareCall("{call DeleteNames(?)}");
+			
+			delcre.setInt(1, id);
+			
+			delcre.executeUpdate();
+			
+			delcre.close();
+			
+			delcre = conn.prepareCall("{call deleteAppearanceCreature(?)}");
+			
+			delcre.setInt(1, id);
+			
+			delcre.executeUpdate();
+			
+			delcre.close();
 		}
 		catch(SQLException e) {
 			e.printStackTrace();

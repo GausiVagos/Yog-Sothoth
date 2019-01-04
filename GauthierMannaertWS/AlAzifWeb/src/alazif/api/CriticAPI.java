@@ -2,8 +2,8 @@ package alazif.api;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import alazif.pojos.Critic;
+import oracle.jdbc.internal.OracleTypes;
 
 @Path("critic")
 public class CriticAPI {
@@ -37,25 +38,32 @@ public class CriticAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("user") int userId, @PathParam("novel") int novelId)
 	{
-		String json;
-		
+		Critic c = new Critic();
 		CallableStatement addwri = null;
+		ResultSet res = null;
 		try {
-			addwri = conn.prepareCall("{? = call FINDCRITIC(?,?)}");
+			addwri = conn.prepareCall("{? = call findById.findCritic(?,?)}");
 			
-			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, userId);
 			addwri.setInt(3, novelId);
 
 			addwri.executeUpdate();
-			json = addwri.getString(1);
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res.next()) {
+				c.setUserId(res.getInt("userId"));
+				c.setNovelId(res.getInt("novelId"));
+				c.setCommentary(res.getString("commentary"));
+				c.setRating(res.getFloat("rating"));
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		
-		return Response.status(Status.OK).entity(json).build();
+		return Response.status(Status.OK).entity(c).build();
 	}
 	
 	@Path("all")

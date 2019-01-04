@@ -2,9 +2,9 @@ package alazif.api;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashSet;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -20,6 +20,7 @@ import javax.ws.rs.core.Response.Status;
 
 import alazif.pojos.Critic;
 import alazif.pojos.User;
+import oracle.jdbc.internal.OracleTypes;
 
 @Path("user")
 public class UserAPI {
@@ -27,36 +28,58 @@ public class UserAPI {
 	Connection conn = ProjectConnection.getInstance();
 	
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response no()
-	{
-		User defaultValue=new User(0, "DefaultUser", "DefaultPassword", false, new HashSet<Critic>());
-		return Response.status(Status.OK).entity(defaultValue).build();
-	}
-	
 	@Path("{id}")
-	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") int id)
 	{
-		String json;
-		
+		User u = new User();
 		CallableStatement addwri = null;
+		ResultSet res = null;
 		try {
-			addwri = conn.prepareCall("{? = call FINDUSER(?)}");
+			addwri = conn.prepareCall("{? = call findById.findUser(?)}");
 			
-			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, id);
 
-			addwri.executeUpdate();
-			json = addwri.getString(1);
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
 			
+			if(res.next()) {
+				u.setUserId(res.getInt("userId"));
+				u.setUserName(res.getString("userName"));
+				u.setPassword(res.getString("password"));
+				if(res.getInt("administator") == 1) {
+					u.setAdmin(true);
+				}
+				else {
+					u.setAdmin(false);
+				}
+			}
+			
+			addwri.close();
+			res.close();
+
+			addwri = conn.prepareCall("{? = call findById.findCriticByUser(?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, u.getUserId());
+
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res.next()) {
+				u.AddCritic(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
+			}
+			
+			addwri.close();
+			res.close();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		
-		return Response.status(Status.OK).entity(json).build();
+		return Response.status(Status.OK).entity(u).build();
 	}
 	
 	@Path("all")
@@ -148,6 +171,17 @@ public class UserAPI {
 			deluser.setInt(1, id);
 			
 			deluser.executeUpdate();
+			
+			deluser.close();
+			
+			deluser = conn.prepareCall("{call deleteCriticByUser(?)}");
+			
+			deluser.setInt(1, id);
+			
+			deluser.executeUpdate();
+			
+			deluser.close();
+			
 		}
 		catch(SQLException e) {
 			e.printStackTrace();

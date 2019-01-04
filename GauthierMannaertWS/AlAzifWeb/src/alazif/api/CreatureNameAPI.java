@@ -2,6 +2,7 @@ package alazif.api;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
@@ -18,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import alazif.pojos.CreatureName;
+import oracle.jdbc.driver.OracleTypes;
 
 @Path("creatureName")
 public class CreatureNameAPI{
@@ -37,24 +39,29 @@ public class CreatureNameAPI{
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") int id)
 	{
-		String json;
-		
+		CreatureName cn = new CreatureName();
 		CallableStatement addwri = null;
+		ResultSet res = null;
 		try {
-			addwri = conn.prepareCall("{? = call FINDCREATURENAME(?)}");
+			addwri = conn.prepareCall("{? = call findById.findCreatureName(?)}");
 			
-			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, id);
 
 			addwri.executeUpdate();
-			json = addwri.getString(1);
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res.next()) {
+				cn.setCreatureNameId(res.getInt("creatureNameId"));
+				cn.setName(res.getString("name"));
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		
-		return Response.status(Status.OK).entity(json).build();
+		return Response.status(Status.OK).entity(cn).build();
 	}
 	
 	@Path("all")

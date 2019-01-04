@@ -2,6 +2,7 @@ package alazif.api;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashSet;
@@ -21,6 +22,7 @@ import javax.ws.rs.core.Response.Status;
 import alazif.pojos.Critic;
 import alazif.pojos.Novel;
 import alazif.pojos.Writer;
+import oracle.jdbc.driver.OracleTypes;
 
 @Path("novel")
 public class NovelAPI {
@@ -41,24 +43,69 @@ public class NovelAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("id") int id)
 	{
-String json;
-		
+		Novel n = new Novel();	
+		Writer w = new Writer();
 		CallableStatement addwri = null;
+		ResultSet res = null;
 		try {
-			addwri = conn.prepareCall("{? = call FINDNOVEL(?)}");
+			addwri = conn.prepareCall("{? = call findById.findNovel(?)}");
 			
-			addwri.registerOutParameter(1, Types.VARCHAR);
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, id);
 
-			addwri.executeUpdate();
-			json = addwri.getString(1);
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
 			
+			if(res.next()) {
+				n.setNovelId(res.getInt("novelId"));
+				n.setTitle(res.getString("title"));
+				n.setYear(res.getInt("publishingYear"));
+				w.setWriterId(res.getInt("writerId"));
+				n.setSynopsis(res.getString("synosis"));
+			}
+			
+			addwri.close();
+			res.close();
+			
+			addwri = conn.prepareCall("{? = call findById.findWriter(?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, w.getWriterId());
+
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res.next()) {
+				w.setFirstName(res.getString("firstName"));
+				w.setLastName(res.getString("lastName"));
+				w.setBiography(res.getString("biography"));
+				n.setWriter(w);
+			}
+			
+			addwri.close();
+			res.close();
+			/*
+			addwri = conn.prepareCall("{? = call findById.findCriticByNovel(?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, id);
+
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
+			
+			while(res.next()) {
+				n.AddCritic(new Critic(res.getInt("userId"), 
+						res.getInt("novelId"), 
+						res.getString("commentary"), 
+						res.getFloat("rating")));
+			}
+			*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
 		}
 		
-		return Response.status(Status.OK).entity(json).build();
+		return Response.status(Status.OK).entity(n).build();
 	}
 	
 	@Path("all")
@@ -138,6 +185,24 @@ String json;
 			delnov.setInt(1, id);
 			
 			delnov.executeUpdate();
+			
+			delnov.close();
+			
+			delnov = conn.prepareCall("{call DeleteCriticByNovel(?)}");
+			
+			delnov.setInt(1, id);
+			
+			delnov.executeUpdate();
+			
+			delnov.close();
+			
+			delnov = conn.prepareCall("{call deleteAppearanceNovel(?)}");
+			
+			delnov.setInt(1, id);
+			
+			delnov.executeUpdate();
+			
+			delnov.close();
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
