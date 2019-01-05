@@ -14,5 +14,7 @@ public abstract class DAO<T>
 	public abstract boolean update(T obj);
 	
 	public abstract T find(String search);
+	
+	public abstract T[] getAll();
 
 }

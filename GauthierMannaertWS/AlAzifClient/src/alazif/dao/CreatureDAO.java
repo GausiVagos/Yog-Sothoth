@@ -82,4 +82,21 @@ public class CreatureDAO extends DAO<Creature> {
 		}
 		return null;
 	}
+
+	@Override
+	public Creature[] getAll() {
+		Creature[] all=null;
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path("all").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		if(cr.getStatus()==200)
+		{
+			try
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				all = mapper.readValue(cr.getEntity(String.class), Creature[].class);
+				return all;
+			}
+			catch(Exception e){}
+		}
+		return null;
+	}
 }

@@ -83,4 +83,21 @@ public class WriterDAO extends DAO<Writer> {
 		return null;
 	}
 
+	@Override
+	public Writer[] getAll() {
+		Writer[] all=null;
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path("all").accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		if(cr.getStatus()==200)
+		{
+			try
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				all = mapper.readValue(cr.getEntity(String.class), Writer[].class);
+				return all;
+			}
+			catch(Exception e){}
+		}
+		return null;
+	}
+
 }
