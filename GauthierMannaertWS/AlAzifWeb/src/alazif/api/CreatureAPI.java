@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashSet;
-import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -148,9 +147,10 @@ public class CreatureAPI {
 			getapp.setInt(2, c.getCreatureId());
 			getapp.executeUpdate();
 			
-			String list=getapp.getString(1);
+			String chaineJson=getapp.getString(1);
 			ObjectMapper mapper = new ObjectMapper();
-			Set novelIds= mapper.readValue(list.getBytes(), Set.class);
+			//Set novelIds= mapper.readValue(list.getBytes(), Set.class);
+			Integer[] novelIds =mapper.readValue(chaineJson, Integer[].class);
 			
 			//Ajout des nouveaux
 			for(Novel n : c.getSetOfNovels())
@@ -203,16 +203,16 @@ public class CreatureAPI {
 			getnames.setInt(2, c.getCreatureId());
 			getnames.executeUpdate();
 			
-			list=getnames.getString(1);
-			Set namesIds= mapper.readValue(list.getBytes(), Set.class);
+			chaineJson=getnames.getString(1);
+			Integer[] namesIds= mapper.readValue(chaineJson.getBytes(), Integer[].class);
 			
 			//Ajout des nouveaux
 			for(CreatureName cn : c.getSetOfNames())
 			{
 				boolean found=false;
-				for(Object i : namesIds)
+				for(Integer i : namesIds)
 				{
-					if(cn.getCreatureNameId()==(Integer)i)
+					if(cn.getCreatureNameId()==i)
 					{
 						found=true;
 						break;
@@ -230,12 +230,12 @@ public class CreatureAPI {
 			}
 			
 			//Suppression des obsolètes
-			for(Object i : namesIds)
+			for(Integer i : namesIds)
 			{
 				boolean found=false;
 				for(CreatureName cn : c.getSetOfNames())
 				{
-					if(cn.getCreatureNameId()==(Integer)i)
+					if(cn.getCreatureNameId()==i)
 					{
 						found=true;
 						break;
@@ -245,7 +245,7 @@ public class CreatureAPI {
 				{
 					//Si une info est dans la db mais pas dans l'objet, on la supprime
 					CallableStatement delnam=conn.prepareCall("{call DELETECREATURENAME(?)}");
-					delnam.setInt(1, (Integer)i);
+					delnam.setInt(1, i);
 					delnam.executeUpdate();
 				}
 			}
