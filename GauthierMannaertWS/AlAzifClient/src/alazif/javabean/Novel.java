@@ -1,6 +1,7 @@
 package alazif.javabean;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Novel implements Serializable{
@@ -115,5 +116,12 @@ public class Novel implements Serializable{
 			return tot/setOfCritics.size();
 		}
 		else return 0;
+	}
+	
+	public Set<Creature> getCreatures()
+	{
+		Set<Creature> creatures=new HashSet<Creature>();
+		
+		return creatures;
 	}
 }

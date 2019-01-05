@@ -2,6 +2,8 @@ package alazif.javabean;
 
 import java.io.Serializable;
 
+import alazif.dao.CriticDAO;
+
 public class Critic implements Serializable{
 	
 	//attributs
@@ -57,5 +59,19 @@ public class Critic implements Serializable{
 	
 	public void setRating(float rating) {
 		this.rating = rating;
+	}
+	
+	//Autres méthodes
+	
+	public boolean modifyCritic(String comment, float rat)
+	{
+		setCommentary(comment);
+		setRating(rat);
+		return new CriticDAO().update(this);
+	}
+	
+	public boolean deleteCritic()
+	{
+		return new CriticDAO().delete(this);
 	}
 }

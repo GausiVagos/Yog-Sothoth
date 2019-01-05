@@ -3,6 +3,8 @@ package alazif.javabean;
 import java.io.Serializable;
 import java.util.Set;
 
+import alazif.dao.CriticDAO;
+
 public class User implements Serializable{
 	
 	//attributs
@@ -77,11 +79,11 @@ public class User implements Serializable{
 	
 	//méthodes pour liste
 	
-	public void AddCritic(Critic c) {
+	public void addCritic(Critic c) {
 		setOfCritics.add(c);
 	}
 	
-	public void DeleteCritic(Critic c) {
+	public void deleteCritic(Critic c) {
 		for(Critic crit : setOfCritics)
 		{
 			if(crit.getUserId()==c.getUserId() && crit.getNovelId()==c.getNovelId())
@@ -89,5 +91,12 @@ public class User implements Serializable{
 				setOfCritics.remove(crit);
 			}
 		}
+	}
+	
+	//Autres méthodes
+	
+	public boolean placeCritic(Novel n, String comment, float rat)
+	{
+		return new CriticDAO().create(new Critic(this.userId,n.getNovelId(),comment,rat));
 	}
 }
