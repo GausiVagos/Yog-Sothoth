@@ -121,13 +121,13 @@ public class CreatureAPI {
 			addwri.close();
 			res.close();
 			
-			addwri = conn.prepareCall("{? = findById.findNames(?)}");
+			addwri = conn.prepareCall("{? = call findById.findNames(?)}");
 			
 			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, id);
 			
 			addwri.execute();
-			res = (ResultSet)addwri.getObject(1);
+			res = (ResultSet) addwri.getObject(1);
 			
 			if(res != null) {
 				while(res.next()) {
