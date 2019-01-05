@@ -53,7 +53,7 @@ public class UserBusiness {
 		
 		if(erreur.equals("")) {
 			for(User user : lUser) {
-				if(user.getUserName() == pseudo && user.getPassword() == password) {
+				if(user.getUserName().equals(pseudo) && user.getPassword().equals(password)) {
 					this.u = user;
 					break;
 				}
