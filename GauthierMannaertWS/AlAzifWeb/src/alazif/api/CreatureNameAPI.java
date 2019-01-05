@@ -21,7 +21,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import alazif.pojos.CreatureName;
-import oracle.jdbc.driver.OracleTypes;
+import oracle.jdbc.internal.OracleTypes;
 
 @Path("creatureName")
 public class CreatureNameAPI{

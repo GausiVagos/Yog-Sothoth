@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response.Status;
 import alazif.pojos.Critic;
 import alazif.pojos.Novel;
 import alazif.pojos.Writer;
-import oracle.jdbc.driver.OracleTypes;
+import oracle.jdbc.internal.OracleTypes;
 
 @Path("novel")
 public class NovelAPI {
