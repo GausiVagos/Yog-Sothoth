@@ -88,12 +88,32 @@ public class Novel implements Serializable{
 	//Méthodes de Sets
 	
 	public void AddCritic(Critic c) {
-		//if(!setOfCritics.contains(c))
-			setOfCritics.add(c);
+		setOfCritics.add(c);
 	}
 	
 	public void DeleteCritic(Critic c) {
-		//if(setOfCritics.contains(c))
-			setOfCritics.remove(c);
+		for(Critic crit : setOfCritics)
+		{
+			if(crit.getUserId()==c.getUserId() && crit.getNovelId()==c.getNovelId())
+			{
+				setOfCritics.remove(crit);
+			}
+		}
+	}
+	
+	//Autres méthodes
+	
+	public float calculerMoyenne()
+	{
+		if(!setOfCritics.isEmpty())
+		{
+			float tot=0;
+			for(Critic c : setOfCritics)
+			{
+				tot+=c.getRating();
+			}
+			return tot/setOfCritics.size();
+		}
+		else return 0;
 	}
 }

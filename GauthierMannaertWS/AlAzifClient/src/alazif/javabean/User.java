@@ -82,6 +82,12 @@ public class User implements Serializable{
 	}
 	
 	public void DeleteCritic(Critic c) {
-		setOfCritics.remove(c);
+		for(Critic crit : setOfCritics)
+		{
+			if(crit.getUserId()==c.getUserId() && crit.getNovelId()==c.getNovelId())
+			{
+				setOfCritics.remove(crit);
+			}
+		}
 	}
 }
