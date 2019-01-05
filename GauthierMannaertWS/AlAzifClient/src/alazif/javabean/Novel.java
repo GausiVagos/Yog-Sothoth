@@ -88,11 +88,11 @@ public class Novel implements Serializable{
 	
 	//Méthodes de Sets
 	
-	public void AddCritic(Critic c) {
+	public void addCritic(Critic c) {
 		setOfCritics.add(c);
 	}
 	
-	public void DeleteCritic(Critic c) {
+	public void deleteCritic(Critic c) {
 		for(Critic crit : setOfCritics)
 		{
 			if(crit.getUserId()==c.getUserId() && crit.getNovelId()==c.getNovelId())
@@ -117,11 +117,12 @@ public class Novel implements Serializable{
 		}
 		else return 0;
 	}
-	
+	/*
 	public Set<Creature> getCreatures()
 	{
 		Set<Creature> creatures=new HashSet<Creature>();
 		
 		return creatures;
 	}
+	*/
 }

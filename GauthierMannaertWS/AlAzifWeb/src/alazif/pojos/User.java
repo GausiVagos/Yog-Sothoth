@@ -77,11 +77,17 @@ public class User implements Serializable{
 	
 	//méthodes pour liste
 	
-	public void AddCritic(Critic c) {
+	public void addCritic(Critic c) {
 		setOfCritics.add(c);
 	}
 	
-	public void DeleteCritic(Critic c) {
-		setOfCritics.remove(c);
+	public void deleteCritic(Critic c) {
+		for(Critic crit : setOfCritics)
+		{
+			if(crit.getUserId()==c.getUserId() && crit.getNovelId()==c.getNovelId())
+			{
+				setOfCritics.remove(crit);
+			}
+		}
 	}
 }
