@@ -26,6 +26,7 @@ import alazif.pojos.Novel;
 import alazif.pojos.Writer;
 import oracle.jdbc.OracleTypes;
 
+
 @Path("creature")
 public class CreatureAPI {
 	
