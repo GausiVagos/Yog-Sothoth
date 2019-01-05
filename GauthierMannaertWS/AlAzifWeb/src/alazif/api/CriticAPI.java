@@ -1,5 +1,12 @@
 package alazif.api;
 
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -13,9 +20,13 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import alazif.pojos.Critic;
+import oracle.jdbc.internal.OracleTypes;
 
 @Path("critic")
 public class CriticAPI {
+	
+	Connection conn = ProjectConnection.getInstance();
+	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response no()
@@ -29,10 +40,31 @@ public class CriticAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getById(@PathParam("user") int userId, @PathParam("novel") int novelId)
 	{
-		Critic c=new Critic();
-		c.setUserId(userId);
-		c.setNovelId(novelId);
-		//On cherche ds la db selon id
+		Critic c = new Critic();
+		CallableStatement addwri = null;
+		ResultSet res = null;
+		try {
+			addwri = conn.prepareCall("{? = call findById.findCritic(?,?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, userId);
+			addwri.setInt(3, novelId);
+
+			addwri.executeUpdate();
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res.next()) {
+				c.setUserId(res.getInt("userId"));
+				c.setNovelId(res.getInt("novelId"));
+				c.setCommentary(res.getString("commentary"));
+				c.setRating(res.getFloat("rating"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		
 		return Response.status(Status.OK).entity(c).build();
 	}
 	
@@ -41,7 +73,31 @@ public class CriticAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll()
 	{
-		Critic[] all=null;
+		Set<Critic> all = new HashSet<Critic>();
+		CallableStatement allWri = null;
+		ResultSet res = null;
+		
+		try {
+			allWri = conn.prepareCall("{? = call findAll.findAllCritic}");
+			
+			allWri.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			allWri.execute();
+			res = (ResultSet) allWri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					all.add(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
+				}
+			}
+			
+			allWri.close();
+			res.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		
 		return Response.status(Status.OK).entity(all).build();
 	}
@@ -52,6 +108,21 @@ public class CriticAPI {
 	public Response add(Critic c)
 	{
 		//On l'ajoute ds la db
+		CallableStatement addcri = null;
+		try {
+			addcri = conn.prepareCall("{call AddCritic(?, ?, ?, ?)}");
+			
+			addcri.setInt(1, c.getUserId());
+			addcri.setInt(2, c.getNovelId());
+			addcri.setFloat(3, c.getRating());
+			addcri.setString(4, c.getCommentary());
+			
+			addcri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.CREATED).build();
 	}
 	
@@ -62,6 +133,21 @@ public class CriticAPI {
 	public Response modify(@PathParam("user") int userId, @PathParam("novel") int novelId, Critic c)
 	{
 		//On le modifie ds la db
+		CallableStatement modcri = null;
+		try {
+			modcri = conn.prepareCall("{call UpdateCritic(?, ?, ?, ?)}");
+			
+			modcri.setInt(1, c.getUserId());
+			modcri.setInt(2, c.getNovelId());
+			modcri.setFloat(3, c.getRating());
+			modcri.setString(4, c.getCommentary());
+			
+			modcri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 	
@@ -71,6 +157,19 @@ public class CriticAPI {
 	public Response delete(@PathParam("user") int userId, @PathParam("novel") int novelId)
 	{
 		//On le supprime ds la db
+		CallableStatement delcri = null;
+		try {
+			delcri = conn.prepareCall("{call DeleteCritic(?, ?)}");
+			
+			delcri.setInt(1, userId);
+			delcri.setInt(2, novelId);
+			
+			delcri.executeUpdate();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).build();
 	}
 }

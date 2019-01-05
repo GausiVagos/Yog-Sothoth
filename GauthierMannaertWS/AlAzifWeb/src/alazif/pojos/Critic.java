@@ -10,13 +10,13 @@ public class Critic implements Serializable{
 	private int userId;
 	private int novelId;
 	private String commentary;
-	private int rating;
+	private float rating;
 	
 	//constructeurs
 	
 	public Critic() {}
 	
-	public Critic(int userId, int novelId, String commentary, int rating) {
+	public Critic(int userId, int novelId, String commentary, float rating) {
 		this.userId = userId;
 		this.novelId = novelId;
 		this.commentary = commentary;
@@ -37,7 +37,7 @@ public class Critic implements Serializable{
 		return this.commentary;
 	}
 	
-	public int getRating() {
+	public float getRating() {
 		return this.rating;
 	}
 	
@@ -55,7 +55,7 @@ public class Critic implements Serializable{
 		this.commentary = commentary;
 	}
 	
-	public void setRating(int rating) {
+	public void setRating(float rating) {
 		this.rating = rating;
 	}
 }

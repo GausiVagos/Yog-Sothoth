@@ -69,9 +69,9 @@ public class UserDAO extends DAO<User> {
 	@Override
 	public User find(String search) {
 		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path(search).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
-
 		if(cr.getStatus()==200)
 		{
+			
 			try
 			{
 				ObjectMapper mapper = new ObjectMapper();
