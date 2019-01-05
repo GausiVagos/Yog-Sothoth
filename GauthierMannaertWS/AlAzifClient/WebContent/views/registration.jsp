@@ -7,6 +7,7 @@
 <title>Inscription</title>
 </head>
 <body>
+	<h1>Inscription</h1>
 	<form action="registration" method="POST">
 		<table border="1">
     		<tr>
@@ -28,10 +29,10 @@
 	</form>
 	<a href="/connection">retour</a>
 	<p> 
-		  	<%
-		  	String erreur = (String)request.getAttribute("erreur"); 
-		  	if(!erreur.equals("")){
-		  		out.println(erreur);
+		<%
+			String erreur = (String)request.getAttribute("erreur"); 
+			if(!erreur.equals("")){
+				out.println(erreur);
 			}	
 		%>
 	</p>

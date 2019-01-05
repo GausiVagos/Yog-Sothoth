@@ -23,7 +23,7 @@
 				  </tr>
 			  </table>
 		  </form>
-		  <a href="AlAzifClient/register">Inscription</a>
+		  <a href="/register">Inscription</a>
 		  <p> 
 		  	<%
 		  		String erreur = (String)request.getAttribute("erreur"); 

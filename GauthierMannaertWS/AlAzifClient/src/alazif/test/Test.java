@@ -1,11 +1,5 @@
 package alazif.test;
 
-import alazif.dao.CreatureDAO;
-import alazif.dao.WriterDAO;
-import alazif.javabean.Creature;
-import alazif.javabean.CreatureName;
-import alazif.javabean.Writer;
-
 public class Test {
 
 	public static void main(String[] args) {
