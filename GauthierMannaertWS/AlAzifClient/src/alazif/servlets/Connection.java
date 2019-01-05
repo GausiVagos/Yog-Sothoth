@@ -38,8 +38,6 @@ public class Connection extends HttpServlet {
 		else {
 			request.setAttribute("erreur", uBusi.getErreur());
 			getServletContext().getRequestDispatcher("/views\\connection.jsp").forward(request, response);
-		}
-		
+		}	
 	}
-
 }

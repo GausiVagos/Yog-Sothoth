@@ -8,4 +8,13 @@
 	    <servlet-name>Connection</servlet-name>
 	    <url-pattern>/connection</url-pattern>
   	</servlet-mapping>
+  	
+  	<servlet>
+  		<servlet-name>Registration</servlet-name>
+  		<servlet-class>alazif.servlets.Registration</servlet-class>
+  	</servlet>
+  	<servlet-mapping>
+  		<servlet-name>Registration</servlet-name>
+  		<url-pattern>/registration</url-pattern>
+  	</servlet-mapping>
 </web-app>
