@@ -205,22 +205,14 @@ public class UserAPI {
 		//On le supprime ds la db
 		CallableStatement deluser = null;
 		try {
-			deluser = conn.prepareCall("{call DeleteUser(?)}");
-			
-			deluser.setInt(1, id);
-			
-			deluser.executeUpdate();
-			
-			deluser.close();
-			
 			deluser = conn.prepareCall("{call deleteCriticByUser(?)}");
-			
 			deluser.setInt(1, id);
-			
 			deluser.executeUpdate();
-			
 			deluser.close();
-			
+			deluser = conn.prepareCall("{call DeleteUser(?)}");
+			deluser.setInt(1, id);
+			deluser.executeUpdate();
+			deluser.close();
 		}
 		catch(SQLException e) {
 			e.printStackTrace();

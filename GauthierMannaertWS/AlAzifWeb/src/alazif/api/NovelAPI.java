@@ -207,13 +207,6 @@ public class NovelAPI {
 		//On le supprime ds la db
 		CallableStatement delnov = null;
 		try {
-			delnov = conn.prepareCall("{call DeleteNovel(?)}");
-			
-			delnov.setInt(1, id);
-			
-			delnov.executeUpdate();
-			
-			delnov.close();
 			
 			delnov = conn.prepareCall("{call DeleteCriticByNovel(?)}");
 			
@@ -224,6 +217,14 @@ public class NovelAPI {
 			delnov.close();
 			
 			delnov = conn.prepareCall("{call deleteAppearanceNovel(?)}");
+			
+			delnov.setInt(1, id);
+			
+			delnov.executeUpdate();
+			
+			delnov.close();
+			
+			delnov = conn.prepareCall("{call DeleteNovel(?)}");
 			
 			delnov.setInt(1, id);
 			

@@ -326,14 +326,6 @@ public class CreatureAPI {
 		//On le supprime ds la db
 		CallableStatement delcre = null;
 		try {
-			delcre = conn.prepareCall("{call DeleteCreature(?)}");
-			
-			delcre.setInt(1, id);
-			
-			delcre.executeUpdate();
-			
-			delcre.close();
-			
 			delcre = conn.prepareCall("{call DeleteNames(?)}");
 			
 			delcre.setInt(1, id);
@@ -343,6 +335,14 @@ public class CreatureAPI {
 			delcre.close();
 			
 			delcre = conn.prepareCall("{call deleteAppearanceCreature(?)}");
+			
+			delcre.setInt(1, id);
+			
+			delcre.executeUpdate();
+			
+			delcre.close();
+			
+			delcre = conn.prepareCall("{call DeleteCreature(?)}");
 			
 			delcre.setInt(1, id);
 			
