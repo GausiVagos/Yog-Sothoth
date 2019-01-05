@@ -159,15 +159,24 @@ public class CreatureAPI {
 		
 		try {
 			allWri = conn.prepareCall("{? = call findAll.findAllCreature}");
-			
 			allWri.registerOutParameter(1, OracleTypes.CURSOR);
-			
 			allWri.execute();
 			res = (ResultSet) allWri.getObject(1);
 			
 			if(res != null) {
+				CallableStatement getFirstName = conn.prepareCall("{? = call findById.findFirstCreatureName(?)}");
+				getFirstName.registerOutParameter(1, OracleTypes.CURSOR);
+				ResultSet name=null;
 				while(res.next()) {
-					all.add(new Creature(res.getInt("creatureId"), res.getString("description"), null, null, null));
+					getFirstName.setInt(2, res.getInt("creatureId"));
+					getFirstName.execute();
+					name=(ResultSet)getFirstName.getObject(1);
+					Set<CreatureName> names=new HashSet<CreatureName>();
+					if(name!=null && name.next())
+					{
+						names.add(new CreatureName(name.getInt("creatureNameId"),name.getString("name")));
+					}
+					all.add(new Creature(res.getInt("creatureId"), res.getString("description"), null, null, names));
 				}
 			}
 			
@@ -201,8 +210,19 @@ public class CreatureAPI {
 			res = (ResultSet) fromNov.getObject(1);
 			
 			if(res != null) {
+				CallableStatement getFirstName = conn.prepareCall("{? = call findById.findFirstCreatureName(?)}");
+				getFirstName.registerOutParameter(1, OracleTypes.CURSOR);
+				ResultSet name=null;
 				while(res.next()) {
-					cre.add(new Creature(res.getInt("creatureId"), res.getString("description"), null, null, null));
+					getFirstName.setInt(2, res.getInt("creatureId"));
+					getFirstName.execute();
+					name=(ResultSet)getFirstName.getObject(1);
+					Set<CreatureName> names=new HashSet<CreatureName>();
+					if(name!=null && name.next())
+					{
+						names.add(new CreatureName(name.getInt("creatureNameId"),name.getString("name")));
+					}
+					cre.add(new Creature(res.getInt("creatureId"), res.getString("description"), null, null, names));
 				}
 			}
 			
