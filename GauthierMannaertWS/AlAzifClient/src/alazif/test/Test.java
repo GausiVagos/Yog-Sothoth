@@ -1,10 +1,7 @@
 package alazif.test;
 
-import alazif.dao.CreatureDAO;
-import alazif.dao.WriterDAO;
-import alazif.javabean.Creature;
-import alazif.javabean.CreatureName;
-import alazif.javabean.Writer;
+import alazif.dao.UserDAO;
+import alazif.javabean.User;
 
 public class Test {
 
@@ -27,6 +24,12 @@ public class Test {
 		w = wdao.find("1");
 		System.out.println(w.getFirstName() + " " + w.getLastName());
 		*/
+		
+		UserDAO udao = new UserDAO();
+		User[] lUser = udao.getAll();
+		for(User u : lUser) {
+			System.out.println(u.getUserName() + ", " + u.getPassword() + ",");
+		}
 	}
 
 }

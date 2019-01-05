@@ -8,7 +8,7 @@
 </head>
 <body>
 	  <h1>Connexion</h1>
-		  <form method="POST">
+		  <form action="connection" method="POST">
 			  <table border="1">
                   <tr>
                       <td>Identifiant/Login : </td>
@@ -23,5 +23,11 @@
 				  </tr>
 			  </table>
 		  </form>
+		  <p> 
+		  	<%
+		  		String erreur = (String)request.getAttribute("erreur"); 
+		  		out.println(erreur);
+		  	%>
+		  </p>
   </body>
 </html>
