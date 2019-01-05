@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -45,6 +46,7 @@ public class NovelAPI {
 	{
 		Novel n = new Novel();	
 		Writer w = new Writer();
+		Set<Critic> lCri = new HashSet<Critic>();
 		CallableStatement addwri = null;
 		ResultSet res = null;
 		try {
@@ -84,7 +86,7 @@ public class NovelAPI {
 			
 			addwri.close();
 			res.close();
-			/*
+			
 			addwri = conn.prepareCall("{? = call findById.findCriticByNovel(?)}");
 			
 			addwri.registerOutParameter(1, OracleTypes.CURSOR);
@@ -93,13 +95,14 @@ public class NovelAPI {
 			addwri.execute();
 			res = (ResultSet) addwri.getObject(1);
 			
-			while(res.next()) {
-				n.AddCritic(new Critic(res.getInt("userId"), 
-						res.getInt("novelId"), 
-						res.getString("commentary"), 
-						res.getFloat("rating")));
+			if(res != null) {
+				while(res.next()) {
+					lCri.add(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
+				}
 			}
-			*/
+			
+			n.setSetOfCritics(lCri);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
@@ -113,7 +116,31 @@ public class NovelAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll()
 	{
-		Novel[] all=null;
+		Set<Novel> all = new HashSet<Novel>();
+		CallableStatement allWri = null;
+		ResultSet res = null;
+		
+		try {
+			allWri = conn.prepareCall("{? = call findAll.findAllNovel}");
+			
+			allWri.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			allWri.execute();
+			res = (ResultSet) allWri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					all.add(new Novel(res.getInt("novelId"), res.getString("title"), res.getInt("publishingyear"), null, res.getString("synosis"), null));
+				}
+			}
+			
+			allWri.close();
+			res.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		
 		return Response.status(Status.OK).entity(all).build();
 	}

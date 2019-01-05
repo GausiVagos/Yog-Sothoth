@@ -4,6 +4,8 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -71,7 +73,31 @@ public class CriticAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll()
 	{
-		Critic[] all=null;
+		Set<Critic> all = new HashSet<Critic>();
+		CallableStatement allWri = null;
+		ResultSet res = null;
+		
+		try {
+			allWri = conn.prepareCall("{? = call findAll.findAllCritic}");
+			
+			allWri.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			allWri.execute();
+			res = (ResultSet) allWri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					all.add(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
+				}
+			}
+			
+			allWri.close();
+			res.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		
 		return Response.status(Status.OK).entity(all).build();
 	}

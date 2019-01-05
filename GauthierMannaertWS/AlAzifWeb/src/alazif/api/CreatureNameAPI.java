@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -69,8 +71,31 @@ public class CreatureNameAPI{
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll()
 	{
-		CreatureName[] all=null;
+		Set<CreatureName> all = new HashSet<CreatureName>();
+		CallableStatement allWri = null;
+		ResultSet res = null;
 		
+		try {
+			allWri = conn.prepareCall("{? = call findAll.findAllName}");
+			
+			allWri.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			allWri.execute();
+			res = (ResultSet) allWri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					all.add(new CreatureName(res.getInt("creatureNameId"), res.getString("name")));
+				}
+			}
+			
+			allWri.close();
+			res.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		return Response.status(Status.OK).entity(all).build();
 	}
 	

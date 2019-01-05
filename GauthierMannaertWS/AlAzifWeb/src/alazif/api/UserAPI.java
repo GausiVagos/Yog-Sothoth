@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -33,6 +35,7 @@ public class UserAPI {
 	public Response getById(@PathParam("id") int id)
 	{
 		User u = new User();
+		Set<Critic> lCri = new HashSet<Critic>();
 		CallableStatement addwri = null;
 		ResultSet res = null;
 		try {
@@ -58,7 +61,7 @@ public class UserAPI {
 			
 			addwri.close();
 			res.close();
-			/*
+			
 			addwri = conn.prepareCall("{? = call findById.findCriticByUser(?)}");
 			
 			addwri.registerOutParameter(1, OracleTypes.CURSOR);
@@ -69,13 +72,15 @@ public class UserAPI {
 			
 			if(res != null) {
 				while(res.next()) {
-					u.AddCritic(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
+					lCri.add(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
 				}
 			}
 			
+			u.setSetOfCritics(lCri);
+			
 			addwri.close();
 			res.close();
-			*/
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
@@ -89,7 +94,39 @@ public class UserAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll()
 	{
-		User[] all=null;
+		Set<User> all = new HashSet<User>();
+		CallableStatement allWri = null;
+		ResultSet res = null;
+		
+		try {
+			allWri = conn.prepareCall("{? = call findAll.findAllUser}");
+			
+			allWri.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			allWri.execute();
+			res = (ResultSet) allWri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					Boolean b;
+					if(res.getInt("administator") == 1) {
+						b = true;
+					}
+					else {
+						b = false;
+					}
+					all.add(new User(res.getInt("userId"), res.getString("userName"), res.getString("password"), b, null));
+				}
+			}
+			
+			allWri.close();
+			res.close();
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
 		
 		return Response.status(Status.OK).entity(all).build();
 	}

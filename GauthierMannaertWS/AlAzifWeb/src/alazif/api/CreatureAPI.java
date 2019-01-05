@@ -5,9 +5,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -47,7 +46,8 @@ public class CreatureAPI {
 	{
 		Creature c = new Creature();
 		Writer w = new Writer();
-		List<Novel> lNov = new ArrayList<Novel>();
+		Set<Novel> lNov = new HashSet<Novel>();
+		Set<CreatureName> lCn = new HashSet<CreatureName>();
 		CallableStatement addwri = null;
 		ResultSet res = null;
 		try {
@@ -85,27 +85,26 @@ public class CreatureAPI {
 			
 			addwri.close();
 			res.close();
-			/*
+			
 			addwri = conn.prepareCall("{? = findById.findNames(?)}");
 			
 			addwri.registerOutParameter(1, OracleTypes.CURSOR);
-			addwri.setInt(2, id);
+			addwri.setInt(2, c.getCreatureId());
 			
 			addwri.execute();
 			res = (ResultSet) addwri.getObject(1);
 			
 			if(res != null) {
 				while(res.next()) {
-					c.AddName(new CreatureName(res.getInt("creatureNameId"), res.getString("name")));
+					lCn.add(new CreatureName(res.getInt("creatureNameId"), res.getString("name")));
 				}
-			}
-			else {
-				c.setSetOfNames(null);
+				
+				c.setSetOfNames(lCn);
 			}
 			
 			addwri.close();
 			res.close();
-			
+			/*
 			addwri = conn.prepareCall("{? = call findById.findAppByCreature(?)}");
 			
 			addwri.registerOutParameter(1, OracleTypes.CURSOR);
@@ -157,8 +156,33 @@ public class CreatureAPI {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getAll()
 	{
-		Creature[] all=null;
-		//On cherche ttes les créatures de la db
+		Set<Creature> all = new HashSet<Creature>();
+		CallableStatement allWri = null;
+		ResultSet res = null;
+		
+		try {
+			allWri = conn.prepareCall("{? = call findAll.findAllCreature}");
+			
+			allWri.registerOutParameter(1, OracleTypes.CURSOR);
+			
+			allWri.execute();
+			res = (ResultSet) allWri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					all.add(new Creature(res.getInt("creatureId"), res.getString("description"), null, null, null));
+				}
+			}
+			
+			allWri.close();
+			res.close();
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		
 		return Response.status(Status.OK).entity(all).build();
 	}
 	
