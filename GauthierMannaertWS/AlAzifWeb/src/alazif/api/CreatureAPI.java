@@ -48,6 +48,7 @@ public class CreatureAPI {
 		Writer w = new Writer();
 		Set<Novel> lNov = new HashSet<Novel>();
 		Set<CreatureName> lCn = new HashSet<CreatureName>();
+		Set<Integer> lInt = new HashSet<Integer>();
 		CallableStatement addwri = null;
 		ResultSet res = null;
 		try {
@@ -86,7 +87,7 @@ public class CreatureAPI {
 			addwri.close();
 			res.close();
 			
-			addwri = conn.prepareCall("{? = findById.findNames(?)}");
+			addwri = conn.prepareCall("{? = call findById.findAppByCreature(?)}");
 			
 			addwri.registerOutParameter(1, OracleTypes.CURSOR);
 			addwri.setInt(2, c.getCreatureId());
@@ -96,53 +97,48 @@ public class CreatureAPI {
 			
 			if(res != null) {
 				while(res.next()) {
-					lCn.add(new CreatureName(res.getInt("creatureNameId"), res.getString("name")));
+					lInt.add(res.getInt("novelId"));
 				}
 				
-				c.setSetOfNames(lCn);
-			}
-			
-			addwri.close();
-			res.close();
-			/*
-			addwri = conn.prepareCall("{? = call findById.findAppByCreature(?)}");
-			
-			addwri.registerOutParameter(1, OracleTypes.CURSOR);
-			addwri.setInt(2, id);
-			
-			addwri.execute();
-			res = (ResultSet) addwri.getObject(1);
-			
-			if(res != null) {
-				while(res.next()) {
-					Novel n = new Novel();
-					n.setNovelId(res.getInt("novelId"));
-					lNov.add(n);
-				}
-				
-				addwri.close();
-				res.close();
-				
-				for(Novel n : lNov) {
+				for(int i : lInt) {
 					addwri = conn.prepareCall("{? = call findById.findNovel(?)}");
 					
 					addwri.registerOutParameter(1, OracleTypes.CURSOR);
-					addwri.setInt(2, n.getNovelId());
+					addwri.setInt(2, i);
 					
 					addwri.execute();
 					res = (ResultSet)addwri.getObject(1);
 					
 					if(res.next()) {
-						n.setTitle(res.getString("title"));
-						n.setYear(res.getInt("publishingyear"));
-						c.AddNovel(n);
+						lNov.add(new Novel(i, res.getString("title"), res.getInt("publishingyear"), null, res.getString("synosis"), null));
 					}
 				}
+				
+				c.setSetOfNovels(lNov);
 			}
 			
 			addwri.close();
 			res.close();
-			*/
+			
+			addwri = conn.prepareCall("{? = findById.findNames(?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, id);
+			
+			addwri.execute();
+			res = (ResultSet)addwri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					lCn.add(new CreatureName(res.getInt("creatureNameId"), res.getString("name")));
+				}
+			}
+			
+			c.setSetOfNames(lCn);
+			
+			addwri.close();
+			res.close();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();
