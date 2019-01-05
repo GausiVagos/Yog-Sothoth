@@ -182,14 +182,42 @@ public class CreatureAPI {
 		
 		return Response.status(Status.OK).entity(all).build();
 	}
-	/*
+	
 	@Path("fromNovel/{id}")
+	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getFromNovel(@PathParam("id") int novel)
 	{
+		Set<Creature> cre = new HashSet<Creature>();
+		CallableStatement fromNov = null;
+		ResultSet res = null;
 		
+		try {
+			fromNov = conn.prepareCall("{? = call findById.findCreaturesByNovel(?)}");
+			
+			fromNov.registerOutParameter(1, OracleTypes.CURSOR);
+			fromNov.setInt(2, novel);
+			fromNov.execute();
+			res = (ResultSet) fromNov.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					cre.add(new Creature(res.getInt("creatureId"), res.getString("description"), null, null, null));
+				}
+			}
+			
+			fromNov.close();
+			res.close();
+			
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		
+		return Response.status(Status.OK).entity(cre).build();
 	}
-	*/
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
