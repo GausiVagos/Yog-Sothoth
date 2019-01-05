@@ -182,7 +182,14 @@ public class CreatureAPI {
 		
 		return Response.status(Status.OK).entity(all).build();
 	}
-	
+	/*
+	@Path("fromNovel/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFromNovel(@PathParam("id") int novel)
+	{
+		
+	}
+	*/
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
