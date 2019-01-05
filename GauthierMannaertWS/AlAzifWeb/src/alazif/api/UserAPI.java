@@ -58,7 +58,7 @@ public class UserAPI {
 			
 			addwri.close();
 			res.close();
-
+			/*
 			addwri = conn.prepareCall("{? = call findById.findCriticByUser(?)}");
 			
 			addwri.registerOutParameter(1, OracleTypes.CURSOR);
@@ -67,13 +67,15 @@ public class UserAPI {
 			addwri.execute();
 			res = (ResultSet) addwri.getObject(1);
 			
-			if(res.next()) {
-				u.AddCritic(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
+			if(res != null) {
+				while(res.next()) {
+					u.AddCritic(new Critic(res.getInt("userId"), res.getInt("novelId"), res.getString("commentary"), res.getFloat("rating")));
+				}
 			}
 			
 			addwri.close();
 			res.close();
-
+			*/
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Response.status(Status.NOT_ACCEPTABLE).build();

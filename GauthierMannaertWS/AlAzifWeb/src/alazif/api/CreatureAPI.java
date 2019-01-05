@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -45,6 +47,7 @@ public class CreatureAPI {
 	{
 		Creature c = new Creature();
 		Writer w = new Writer();
+		List<Novel> lNov = new ArrayList<Novel>();
 		CallableStatement addwri = null;
 		ResultSet res = null;
 		try {
@@ -98,6 +101,44 @@ public class CreatureAPI {
 			}
 			else {
 				c.setSetOfNames(null);
+			}
+			
+			addwri.close();
+			res.close();
+			
+			addwri = conn.prepareCall("{? = call findById.findAppByCreature(?)}");
+			
+			addwri.registerOutParameter(1, OracleTypes.CURSOR);
+			addwri.setInt(2, id);
+			
+			addwri.execute();
+			res = (ResultSet) addwri.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					Novel n = new Novel();
+					n.setNovelId(res.getInt("novelId"));
+					lNov.add(n);
+				}
+				
+				addwri.close();
+				res.close();
+				
+				for(Novel n : lNov) {
+					addwri = conn.prepareCall("{? = call findById.findNovel(?)}");
+					
+					addwri.registerOutParameter(1, OracleTypes.CURSOR);
+					addwri.setInt(2, n.getNovelId());
+					
+					addwri.execute();
+					res = (ResultSet)addwri.getObject(1);
+					
+					if(res.next()) {
+						n.setTitle(res.getString("title"));
+						n.setYear(res.getInt("publishingyear"));
+						c.AddNovel(n);
+					}
+				}
 			}
 			
 			addwri.close();
