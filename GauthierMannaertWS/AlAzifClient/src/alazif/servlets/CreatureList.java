@@ -25,7 +25,7 @@ public class CreatureList extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		CreatureBusiness cBusi = new CreatureBusiness();
-		List<CreatureName> lCre = cBusi.getListCreatureName();
+		List<CreatureName> lCre = cBusi.getAllCreatureNames();
 		request.setAttribute("list", lCre);
 		getServletContext().getRequestDispatcher("/views\\listCreatures.jsp").forward(request, response);
 	}

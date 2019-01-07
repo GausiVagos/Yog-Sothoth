@@ -105,4 +105,26 @@ public class Creature implements Serializable{
 			}
 		}
 	}
+	
+	//Autres méthodes
+	
+	public CreatureName getFirstName()
+	{
+		CreatureName cn=null;
+		if(!setOfNames.isEmpty())
+		{
+			int indexMin=9999;
+			for(CreatureName n : setOfNames)
+			{
+				if(n.getCreatureNameId()<indexMin)
+				{
+					indexMin=n.getCreatureNameId();
+					cn=n;
+				}
+			}
+		}
+		
+		
+		return cn;
+	}
 }

@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="alazif.javabean.Writer" %>
 <!DOCTYPE html>
@@ -19,7 +19,7 @@
 			 %>
 			  	<tr>
 			  		<td><%out.print(w.getFirstName() + " " + w.getLastName());%></td>
-			  		<td><a href="">Voir plus</a></td>
+			  		<td><a href="/AlAzifClient/writer?id=<%out.print(w.getWriterId());%>">Voir plus</a></td>
 			  	</tr>			  
 			 <%
 			 	}	

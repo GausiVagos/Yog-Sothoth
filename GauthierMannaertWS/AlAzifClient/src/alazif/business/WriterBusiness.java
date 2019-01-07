@@ -35,4 +35,9 @@ public class WriterBusiness {
 		
 		return lWri;
 	}
+	
+	public void instanciate(int i)
+	{
+		w=wdao.find(Integer.toString(i));
+	}
 }

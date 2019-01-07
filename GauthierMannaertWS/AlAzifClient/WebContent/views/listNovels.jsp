@@ -19,7 +19,7 @@
 			 %>
 			  	<tr>
 			  		<td><%out.print(n.getTitle());%></td>
-			  		<td><a href="">Voir plus</a></td>
+			  		<td><a href="/AlAzifClient/novel?id=<%out.print(n.getNovelId()); %>">Voir plus</a></td>
 			  	</tr>			  
 			 <%
 			 	}	

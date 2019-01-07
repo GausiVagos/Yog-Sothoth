@@ -117,16 +117,16 @@ public class NovelAPI {
 	public Response getAll()
 	{
 		Set<Novel> all = new HashSet<Novel>();
-		CallableStatement allWri = null;
+		CallableStatement allNov = null;
 		ResultSet res = null;
 		
 		try {
-			allWri = conn.prepareCall("{? = call findAll.findAllNovel}");
+			allNov = conn.prepareCall("{? = call findAll.findAllNovel}");
 			
-			allWri.registerOutParameter(1, OracleTypes.CURSOR);
+			allNov.registerOutParameter(1, OracleTypes.CURSOR);
 			
-			allWri.execute();
-			res = (ResultSet) allWri.getObject(1);
+			allNov.execute();
+			res = (ResultSet) allNov.getObject(1);
 			
 			if(res != null) {
 				while(res.next()) {
@@ -134,7 +134,7 @@ public class NovelAPI {
 				}
 			}
 			
-			allWri.close();
+			allNov.close();
 			res.close();
 		}
 		catch(SQLException e) {
@@ -143,6 +143,41 @@ public class NovelAPI {
 		}
 		
 		return Response.status(Status.OK).entity(all).build();
+	}
+	
+	@Path("fromWriter/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getFromWriter(@PathParam("id") int writerId)
+	{
+		Set<Novel> fromWriter = new HashSet<Novel>();
+		CallableStatement novels = null;
+		ResultSet res = null;
+		
+		try {
+			novels = conn.prepareCall("{? = call findById.findNovelsByWriter(?)}");
+			
+			novels.registerOutParameter(1, OracleTypes.CURSOR);
+			novels.setInt(2, writerId);
+			
+			novels.execute();
+			res = (ResultSet) novels.getObject(1);
+			
+			if(res != null) {
+				while(res.next()) {
+					fromWriter.add(new Novel(res.getInt("novelId"), res.getString("title"), res.getInt("publishingyear"), null, res.getString("synosis"), null));
+				}
+			}
+			
+			novels.close();
+			res.close();
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			return Response.status(Status.NOT_ACCEPTABLE).build();
+		}
+		
+		return Response.status(Status.OK).entity(fromWriter).build();
 	}
 	
 	@POST

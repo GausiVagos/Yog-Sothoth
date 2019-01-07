@@ -34,4 +34,14 @@ public class NovelBusiness {
 		
 		return lNov;
 	}
+	
+	public Novel[] getFromWriter(int writerId)
+	{
+		return ndao.getFromWriter(writerId);
+	}
+	
+	public void instanciate(int novelId)
+	{
+		n=ndao.find(Integer.toString(novelId));
+	}
 }

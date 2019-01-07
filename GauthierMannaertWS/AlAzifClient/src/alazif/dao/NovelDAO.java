@@ -99,5 +99,22 @@ public class NovelDAO extends DAO<Novel> {
 		}
 		return null;
 	}
+	
+	public Novel[] getFromWriter(int writerId)
+	{
+		Novel[] fromWriter=null;
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path("fromWriter/"+writerId).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		if(cr.getStatus()==200)
+		{
+			try
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				fromWriter = mapper.readValue(cr.getEntity(String.class), Novel[].class);
+				return fromWriter;
+			}
+			catch(Exception e){}
+		}
+		return null;
+	}
 
 }

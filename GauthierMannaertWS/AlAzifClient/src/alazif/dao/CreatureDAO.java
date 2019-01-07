@@ -99,4 +99,21 @@ public class CreatureDAO extends DAO<Creature> {
 		}
 		return null;
 	}
+	
+	public Creature[] getFromNovel(int nov)
+	{
+		Creature[] fromNovel=null;
+		ClientResponse cr=Client.create(new DefaultClientConfig()).resource(branchUrl).path("fromNovel/"+nov).accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		if(cr.getStatus()==200)
+		{
+			try
+			{
+				ObjectMapper mapper = new ObjectMapper();
+				fromNovel = mapper.readValue(cr.getEntity(String.class), Creature[].class);
+				return fromNovel;
+			}
+			catch(Exception e){}
+		}
+		return null;
+	}
 }

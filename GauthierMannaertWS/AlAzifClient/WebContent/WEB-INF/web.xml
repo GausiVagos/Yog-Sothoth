@@ -25,28 +25,43 @@
     <url-pattern>/disconnect</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>WriterList</servlet-name>
-  	<servlet-class>alazif.servlets.WriterList</servlet-class>
+    <servlet-name>WriterList</servlet-name>
+    <servlet-class>alazif.servlets.WriterList</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>WriterList</servlet-name>
-  	<url-pattern>/writerlist</url-pattern>
+    <servlet-name>WriterList</servlet-name>
+    <url-pattern>/writerlist</url-pattern>
   </servlet-mapping>
   <servlet>
-  	<servlet-name>CreatureList</servlet-name>
-  	<servlet-class>alazif.servlets.CreatureList</servlet-class>
+    <servlet-name>CreatureList</servlet-name>
+    <servlet-class>alazif.servlets.CreatureList</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>CreatureList</servlet-name>
-  	<url-pattern>/creaturelist</url-pattern>
+    <servlet-name>CreatureList</servlet-name>
+    <url-pattern>/creaturelist</url-pattern>
   </servlet-mapping>
-  
   <servlet>
-  	<servlet-name>NovelList</servlet-name>
-  	<servlet-class>alazif.servlets.NovelList</servlet-class>
+    <servlet-name>NovelList</servlet-name>
+    <servlet-class>alazif.servlets.NovelList</servlet-class>
   </servlet>
   <servlet-mapping>
-  	<servlet-name>NovelList</servlet-name>
-  	<url-pattern>/novellist</url-pattern>
+    <servlet-name>NovelList</servlet-name>
+    <url-pattern>/novellist</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>WriterModel</servlet-name>
+    <servlet-class>alazif.servlets.WriterModel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>WriterModel</servlet-name>
+    <url-pattern>/writer</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>NovelModel</servlet-name>
+    <servlet-class>alazif.servlets.NovelModel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>NovelModel</servlet-name>
+    <url-pattern>/novel</url-pattern>
   </servlet-mapping>
 </web-app>

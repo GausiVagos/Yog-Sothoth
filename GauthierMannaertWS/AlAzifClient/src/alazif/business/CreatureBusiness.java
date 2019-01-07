@@ -38,7 +38,7 @@ public class CreatureBusiness {
 		this.cn = cn;
 	}
 	
-	public List<CreatureName> getListCreatureName(){
+	public List<CreatureName> getAllCreatureNames(){
 		
 		CreatureName[] tabCN = cndao.getAll();
 		List<CreatureName> lCN = new ArrayList<CreatureName>();
@@ -49,4 +49,15 @@ public class CreatureBusiness {
 		
 		return lCN;
 	}
+	
+	public void instanciate(int creatureId)
+	{
+		c=cdao.find(Integer.toString(creatureId));
+	}
+	
+	public Creature[] getCreaturesFromNovel(int novelId)
+	{
+		return cdao.getFromNovel(novelId);
+	}
+	
 }
