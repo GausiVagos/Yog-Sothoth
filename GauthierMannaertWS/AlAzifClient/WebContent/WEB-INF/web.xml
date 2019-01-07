@@ -32,4 +32,12 @@
   	<servlet-name>WriterList</servlet-name>
   	<url-pattern>/writerlist</url-pattern>
   </servlet-mapping>
+  <servlet>
+  	<servlet-name>CreatureList</servlet-name>
+  	<servlet-class>alazif.servlets.CreatureList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>CreatureList</servlet-name>
+  	<url-pattern>/creaturelist</url-pattern>
+  </servlet-mapping>
 </web-app>

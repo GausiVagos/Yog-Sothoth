@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="alazif.javabean.Writer" %>
+<%@ page import="alazif.javabean.Creature" %>
+<%@ page import="alazif.javabean.CreatureName" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -9,16 +10,16 @@
 	  <title>Necronomidex</title>
   </head>
   <body>
-	  <h1>Auteurs de l'univers Lovecraftien</h1>
+	  <h1>Creatures de l'univers Lovecraftien</h1>
 	  <%
-	  ArrayList<Writer> lWri = (ArrayList<Writer>)request.getAttribute("list");
+	  ArrayList<CreatureName> lCN = (ArrayList<CreatureName>)request.getAttribute("list");
 	  %>	  
 		  <table border="1" cellspacing="0" cellpadding="5">
 			 <%
-			 	for(Writer w : lWri){
+			 	for(CreatureName cn: lCN){
 			 %>
 			  	<tr>
-			  		<td><%out.print(w.getFirstName() + " " + w.getLastName());%></td>
+			  		<td><%out.print(cn.getName());%></td>
 			  		<td><a href="">Voir plus</a></td>
 			  	</tr>			  
 			 <%
