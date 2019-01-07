@@ -23,11 +23,11 @@
 				  </tr>
 			  </table>
 		  </form>
-		  <a href="/register">Inscription</a>
+		  <a href="/AlAzifClient/registration">Inscription</a>
 		  <p> 
 		  	<%
 		  		String erreur = (String)request.getAttribute("erreur"); 
-		  		if(!erreur.equals("")){
+		  		if(erreur != null){
 		  			out.println(erreur);
 		  		}
 		  	%>

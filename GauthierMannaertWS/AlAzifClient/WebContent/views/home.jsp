@@ -8,5 +8,6 @@
 </head>
 <body>
 	<h3>Coucou</h3>
+	<a href="/AlAzifClient/disconnect">Déconnexion</a>
 </body>
 </html>

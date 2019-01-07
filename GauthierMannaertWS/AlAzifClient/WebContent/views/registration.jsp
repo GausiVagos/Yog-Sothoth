@@ -27,11 +27,11 @@
 			</tr>
 		</table>
 	</form>
-	<a href="/connection">retour</a>
+	<a href="/AlAzifClient/connection">retour</a>
 	<p> 
 		<%
 			String erreur = (String)request.getAttribute("erreur"); 
-			if(!erreur.equals("")){
+			if(erreur != null){
 				out.println(erreur);
 			}	
 		%>
