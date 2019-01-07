@@ -8,6 +8,7 @@
 </head>
 <body>
 	<h3>Coucou</h3>
+	<a href="/AlAzifClient/writerlist">Liste d'écrivains</a>
 	<a href="/AlAzifClient/disconnect">Déconnexion</a>
 </body>
 </html>

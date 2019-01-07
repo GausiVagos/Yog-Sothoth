@@ -8,7 +8,6 @@
     <servlet-name>Connection</servlet-name>
     <url-pattern>/connection</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>Registration</servlet-name>
     <servlet-class>alazif.servlets.Registration</servlet-class>
@@ -17,7 +16,6 @@
     <servlet-name>Registration</servlet-name>
     <url-pattern>/registration</url-pattern>
   </servlet-mapping>
-  
   <servlet>
     <servlet-name>Disconnect</servlet-name>
     <servlet-class>alazif.servlets.Disconnect</servlet-class>
@@ -25,5 +23,13 @@
   <servlet-mapping>
     <servlet-name>Disconnect</servlet-name>
     <url-pattern>/disconnect</url-pattern>
+  </servlet-mapping>
+  <servlet>
+  	<servlet-name>WriterList</servlet-name>
+  	<servlet-class>alazif.servlets.WriterList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>WriterList</servlet-name>
+  	<url-pattern>/writerlist</url-pattern>
   </servlet-mapping>
 </web-app>
