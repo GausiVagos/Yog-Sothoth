@@ -40,4 +40,13 @@
   	<servlet-name>CreatureList</servlet-name>
   	<url-pattern>/creaturelist</url-pattern>
   </servlet-mapping>
+  
+  <servlet>
+  	<servlet-name>NovelList</servlet-name>
+  	<servlet-class>alazif.servlets.NovelList</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>NovelList</servlet-name>
+  	<url-pattern>/novellist</url-pattern>
+  </servlet-mapping>
 </web-app>
