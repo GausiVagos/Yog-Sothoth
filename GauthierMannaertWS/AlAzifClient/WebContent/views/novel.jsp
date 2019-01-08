@@ -25,7 +25,7 @@
 			<ul>
 			<%for(Creature c : creatures){ %>
 				<li>
-					<a href="/AlAzifWeb/novel?id="<%out.print(c.getCreatureId()); %>>
+					<a href="/AlAzifClient/creature?id=<%out.print(c.getCreatureId()); %>">
 						<%
 							if(c.getFirstName()!=null)	
 								out.print(c.getFirstName().getName());

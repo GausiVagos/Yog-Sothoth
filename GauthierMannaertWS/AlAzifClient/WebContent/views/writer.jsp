@@ -21,7 +21,7 @@
 			<ul>
 			<%for(Novel n : novels){ %>
 				<li>
-					<a href="/AlAzifWeb/novel?id="<%out.print(n.getNovelId()); %>><%out.print(n.getTitle()); %></a>
+					<a href="/AlAzifClient/novel?id=<%out.print(n.getNovelId()); %>"><%out.print(n.getTitle()); %></a>
 				</li>
 			<%} %>
 			</ul>

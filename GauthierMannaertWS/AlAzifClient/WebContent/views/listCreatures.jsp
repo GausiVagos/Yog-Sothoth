@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.ArrayList" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ page import="alazif.javabean.Creature" %>
 <%@ page import="alazif.javabean.CreatureName" %>
 <!DOCTYPE html>
@@ -12,15 +11,21 @@
   <body>
 	  <h1>Creatures de l'univers Lovecraftien</h1>
 	  <%
-	  ArrayList<CreatureName> lCN = (ArrayList<CreatureName>)request.getAttribute("list");
+	  Creature[] tabCre = (Creature[])request.getAttribute("tabCre");
 	  %>	  
 		  <table border="1" cellspacing="0" cellpadding="5">
 			 <%
-			 	for(CreatureName cn: lCN){
+			 	for(Creature c : tabCre){
 			 %>
 			  	<tr>
-			  		<td><%out.print(cn.getName());%></td>
-			  		<td><a href="">Voir plus</a></td>
+			  		<td>
+			  		<%
+			  			if(!c.getSetOfNames().isEmpty())
+			  				out.print(c.getFirstName().getName());
+			  			else
+			  				out.print("-Créature non nommée-");
+			  		%></td>
+			  		<td><a href="/AlAzifClient/creature?id=<%out.print(c.getCreatureId()); %>">Voir plus</td>
 			  	</tr>			  
 			 <%
 			 	}	

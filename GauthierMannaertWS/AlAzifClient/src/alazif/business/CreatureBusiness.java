@@ -38,6 +38,8 @@ public class CreatureBusiness {
 		this.cn = cn;
 	}
 	
+	//Pas vraiment utile
+	/*
 	public List<CreatureName> getAllCreatureNames(){
 		
 		CreatureName[] tabCN = cndao.getAll();
@@ -48,6 +50,12 @@ public class CreatureBusiness {
 		}
 		
 		return lCN;
+	}
+	*/
+	
+	public Creature[] getAllCreatures()
+	{	
+		return cdao.getAll();
 	}
 	
 	public void instanciate(int creatureId)

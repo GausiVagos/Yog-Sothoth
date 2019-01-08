@@ -64,4 +64,12 @@
     <servlet-name>NovelModel</servlet-name>
     <url-pattern>/novel</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>CreatureModel</servlet-name>
+    <servlet-class>alazif.servlets.CreatureModel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CreatureModel</servlet-name>
+    <url-pattern>/creature</url-pattern>
+  </servlet-mapping>
 </web-app>

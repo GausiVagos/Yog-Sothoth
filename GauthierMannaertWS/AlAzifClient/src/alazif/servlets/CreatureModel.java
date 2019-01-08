@@ -11,23 +11,34 @@ import javax.servlet.http.HttpServletResponse;
 import alazif.business.CreatureBusiness;
 import alazif.javabean.Creature;
 
-@WebServlet("/CreatureList")
-public class CreatureList extends HttpServlet {
+@WebServlet("/CreatureModel")
+public class CreatureModel extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-      
-    public CreatureList() {
+       
+    public CreatureModel() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		CreatureBusiness cBusi = new CreatureBusiness();
-		Creature[] tabCre = cBusi.getAllCreatures();
-		request.setAttribute("tabCre", tabCre);
-		getServletContext().getRequestDispatcher("/views\\listCreatures.jsp").forward(request, response);
+		String creatureIndex=request.getParameter("id");
+		int in;
+		CreatureBusiness cBusi=new CreatureBusiness();
+		try
+		{
+			in=Integer.parseInt(creatureIndex);
+		}
+		catch(NumberFormatException e)
+		{
+			in=1;
+		}
+		cBusi.instanciate(in);
+		Creature c=cBusi.getC();
+		request.setAttribute("creature", c);
+		
+		getServletContext().getRequestDispatcher("/views\\creature.jsp").forward(request, response);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
 
