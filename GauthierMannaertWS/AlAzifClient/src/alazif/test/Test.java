@@ -1,5 +1,8 @@
 package alazif.test;
 
+import alazif.dao.CriticDAO;
+import alazif.javabean.Critic;
+
 public class Test {
 
 	public static void main(String[] args) {
@@ -21,6 +24,9 @@ public class Test {
 		w = wdao.find("1");
 		System.out.println(w.getFirstName() + " " + w.getLastName());
 		*/
+		CriticDAO cdao=new CriticDAO();
+		Critic c=new Critic(41,21,"Plutôt sympa",4);
+		System.out.println(cdao.create(c));
 	}
 
 }
