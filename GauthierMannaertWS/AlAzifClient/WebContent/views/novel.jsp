@@ -40,10 +40,9 @@
 		else
 		{%>
 			<p>Notre base de données ne mentionne malheureusement pas les créatures apparaissant dans ce roman</p>
-		<%}
-		request.setAttribute("novel", n);
-		%>
-		<a href="/AlAzifClient/addcritic">Ajouter un commentaire</a>
+		<%}%>
+		
+		<a href="/AlAzifClient/addcritic?id=<%out.print(n.getNovelId());%>">Ajouter un commentaire</a>
 		
 		<%
 		Set<CriticRow> critics=(Set<CriticRow>)request.getAttribute("critics");
