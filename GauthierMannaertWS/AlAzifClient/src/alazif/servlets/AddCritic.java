@@ -17,11 +17,13 @@ import alazif.javabean.User;
 public class AddCritic extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
+	String novelString;
     public AddCritic() {
         super();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		novelString=request.getParameter("id");
 		getServletContext().getRequestDispatcher("/views\\critic.jsp").forward(request, response);
 	}
 
@@ -29,7 +31,7 @@ public class AddCritic extends HttpServlet {
 		HttpSession sess = request.getSession();
 		CriticBusiness cBusi = new CriticBusiness();
 		cBusi.setU((User)sess.getAttribute("user"));
-		String novelString=request.getParameter("id");
+		//novelString=request.getParameter("id");
 		String commentary = request.getParameter("commentary");
 		float rating = Float.parseFloat(request.getParameter("rating"));
 		

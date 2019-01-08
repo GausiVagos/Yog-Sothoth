@@ -107,6 +107,14 @@ public class CriticBusiness
 			erreur += "Le commentaire est vide,";
 		}
 		
+		if(uId==0) {
+			erreur += "uId=0,";
+		}
+		
+		if(nId==0) {
+			erreur += "nId=0,";
+		}
+		
 		if(erreur.equals("")) {
 			/*c.setUserId(uId);
 			c.setNovelId(nId);
@@ -117,7 +125,7 @@ public class CriticBusiness
 				return true;
 			}
 			else {
-				erreur += "Erreur de requête (User : "+u.getUserId()+"),";
+				erreur += "Erreur de requête (User : "+uId+", Novel : "+nId+"),";
 				return false;
 			}
 		}
