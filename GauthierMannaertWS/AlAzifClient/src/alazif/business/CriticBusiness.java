@@ -116,10 +116,6 @@ public class CriticBusiness
 		}
 		
 		if(erreur.equals("")) {
-			/*c.setUserId(uId);
-			c.setNovelId(nId);
-			c.setCommentary(commentary);
-			c.setRating(rating);*/
 			c=new Critic(uId,nId,commentary,rating);
 			if(cdao.create(c)) {
 				return true;
@@ -128,6 +124,20 @@ public class CriticBusiness
 				erreur += "Erreur de requête (User : "+uId+", Novel : "+nId+"),";
 				return false;
 			}
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public boolean TrouverCritique(int uId, int nId) {
+		
+		String test = Integer.toString(uId) + "/" + Integer.toString(nId);
+		
+		c = cdao.find(test);
+		
+		if(c.getRating()!=0) {
+			return true;
 		}
 		else {
 			return false;
