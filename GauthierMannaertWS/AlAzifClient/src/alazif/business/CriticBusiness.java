@@ -12,24 +12,57 @@ import alazif.javabean.User;
 
 public class CriticBusiness 
 {
-	private User u=new User();
-	private UserDAO udao=new UserDAO();
-	private Critic c=new Critic();
-	private CriticDAO cdao=new CriticDAO();
-	private Novel n=new Novel();
-	private NovelDAO ndao=new NovelDAO();
+	private User u;
+	private UserDAO udao;
+	private Critic c;
+	private CriticDAO cdao;
+	private Novel n;
+	private NovelDAO ndao;
+	private String erreur;
+	
+	public CriticBusiness() {
+		u=new User();
+		udao=new UserDAO();
+		c=new Critic();
+		cdao=new CriticDAO();
+		n=new Novel();
+		ndao=new NovelDAO();
+		erreur = "";
+	}
 	
 	public User getU()
 	{
 		return u;
 	}
+	
 	public Critic getC()
 	{
 		return c;
 	}
+	
 	public Novel getN()
 	{
 		return n;
+	}
+	
+	public String getErreur() {
+		return erreur;
+	}
+	
+	public void setU(User u) {
+		this.u = u;
+	}
+	
+	public void setC(Critic c) {
+		this.c = c;
+	}
+	
+	public void setN(Novel n) {
+		this.n= n;
+	}
+	
+	public void setErreur(String erreur) {
+		this.erreur = erreur;
 	}
 	
 	//Pas très utile
@@ -62,5 +95,32 @@ public class CriticBusiness
 			cr.add(new CriticRow(udao.find(Integer.toString(c.getUserId())),c,novel));
 		}
 		return cr;
+	}
+	
+	public boolean AddCritic(int uId, int nId, String commentary, float rating) {
+		
+		if(commentary == null) {
+			erreur += "Le commentaire est null,";
+		}
+		
+		if(commentary.isEmpty()) {
+			erreur += "Le commentaire est vide,";
+		}
+		
+		if(erreur.equals("")) {
+			c.setUserId(uId);
+			c.setNovelId(nId);
+			c.setCommentary(commentary);
+			c.setRating(rating);
+			if(cdao.create(c)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
 	}
 }

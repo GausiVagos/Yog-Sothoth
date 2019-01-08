@@ -72,4 +72,12 @@
     <servlet-name>CreatureModel</servlet-name>
     <url-pattern>/creature</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>AddCritic</servlet-name>
+    <servlet-class>alazif.servlets.AddCritic</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddCritic</servlet-name>
+    <url-pattern>/addcritic</url-pattern>
+  </servlet-mapping>
 </web-app>
