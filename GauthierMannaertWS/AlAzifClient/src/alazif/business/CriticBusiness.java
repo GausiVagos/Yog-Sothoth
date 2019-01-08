@@ -97,7 +97,7 @@ public class CriticBusiness
 		return cr;
 	}
 	
-	public boolean AddCritic(int uId, int nId, String commentary, float rating) {
+	public boolean addCritic(int uId, int nId, String commentary, float rating) {
 		
 		if(commentary == null) {
 			erreur += "Le commentaire est null,";
@@ -108,14 +108,16 @@ public class CriticBusiness
 		}
 		
 		if(erreur.equals("")) {
-			c.setUserId(uId);
+			/*c.setUserId(uId);
 			c.setNovelId(nId);
 			c.setCommentary(commentary);
-			c.setRating(rating);
+			c.setRating(rating);*/
+			c=new Critic(uId,nId,commentary,rating);
 			if(cdao.create(c)) {
 				return true;
 			}
 			else {
+				erreur += "Erreur de requête (User : "+u.getUserId()+"),";
 				return false;
 			}
 		}

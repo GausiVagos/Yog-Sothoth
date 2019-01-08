@@ -29,12 +29,19 @@ public class AddCritic extends HttpServlet {
 		HttpSession sess = request.getSession();
 		CriticBusiness cBusi = new CriticBusiness();
 		cBusi.setU((User)sess.getAttribute("user"));
-		cBusi.setN((Novel)request.getAttribute("novel"));
+		String novelString=request.getParameter("id");
 		String commentary = request.getParameter("commentary");
 		float rating = Float.parseFloat(request.getParameter("rating"));
 		
-		if(cBusi.AddCritic(cBusi.getU().getUserId(), cBusi.getN().getNovelId(), commentary, rating)) {
-			getServletContext().getRequestDispatcher("/AlAzifClient/novel?id="+cBusi.getN().getNovelId()).forward(request, response);
+		int novelIndex;
+		try
+		{
+			novelIndex=Integer.parseInt(novelString);
+		}
+		catch(NumberFormatException e) {novelIndex=1;}
+		
+		if(cBusi.addCritic(cBusi.getU().getUserId(), novelIndex, commentary, rating)) {
+			response.sendRedirect("/AlAzifClient/novel?id="+novelIndex);
 		}
 		else {
 			request.setAttribute("erreur", cBusi.getErreur());
