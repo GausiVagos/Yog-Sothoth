@@ -88,4 +88,12 @@
     <servlet-name>AddWriter</servlet-name>
     <url-pattern>/addwriter</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>AddNovel</servlet-name>
+    <servlet-class>alazif.servlets.AddNovel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddNovel</servlet-name>
+    <url-pattern>/addnovel</url-pattern>
+  </servlet-mapping>
 </web-app>

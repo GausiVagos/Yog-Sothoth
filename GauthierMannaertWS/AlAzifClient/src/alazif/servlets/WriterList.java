@@ -25,7 +25,7 @@ public class WriterList extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		WriterBusiness wBusi = new WriterBusiness();
-		List<Writer> lWri = wBusi.getListWriter();
+		Writer[] lWri = wBusi.getListWriter();
 		request.setAttribute("list", lWri);
 		getServletContext().getRequestDispatcher("/views\\listWriters.jsp").forward(request, response);
 	}

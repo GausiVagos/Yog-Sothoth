@@ -19,18 +19,18 @@ public class Novel implements Serializable{
 	
 	public Novel() {}
 	
-	public Novel(String title, int year, Writer writer, String synopsis, Set<Critic> setOfCritics) {
+	public Novel(String title, int year, Writer writer, String synopsis) {
 		this.novelId = 0;
 		this.title = title;
 		this.year = year;
 		this.writer=writer;
 		this.synopsis=synopsis;
-		this.setOfCritics = setOfCritics;
 	}
 	
 	public Novel(int novelId, String title, int year, Writer writer, String synopsis, Set<Critic> setOfCritics) {
-		this(title, year, writer, synopsis, setOfCritics);
+		this(title, year, writer, synopsis);
 		this.novelId = novelId;
+		this.setOfCritics=setOfCritics;
 	}
 	
 	//getters

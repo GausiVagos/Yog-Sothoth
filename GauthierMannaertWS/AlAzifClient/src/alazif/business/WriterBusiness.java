@@ -24,16 +24,9 @@ public class WriterBusiness {
 		this.w = w;
 	}
 	
-	public List<Writer> getListWriter(){
+	public Writer[] getListWriter(){
 		
-		Writer[] tabWri = wdao.getAll();
-		List<Writer> lWri = new ArrayList<Writer>();
-		
-		for(Writer wri : tabWri) {
-			lWri.add(wri);
-		}
-		
-		return lWri;
+		return wdao.getAll();
 	}
 	
 	public void instanciate(int i)

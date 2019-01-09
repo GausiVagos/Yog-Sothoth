@@ -5,6 +5,7 @@ import java.util.List;
 
 import alazif.dao.NovelDAO;
 import alazif.javabean.Novel;
+import alazif.javabean.Writer;
 
 public class NovelBusiness {
 	
@@ -43,5 +44,11 @@ public class NovelBusiness {
 	public void instanciate(int novelId)
 	{
 		n=ndao.find(Integer.toString(novelId));
+	}
+	
+	public boolean addNovel(String t, int y, Writer w, String s)
+	{
+		n=new Novel(t,y,w,s);
+		return ndao.create(n);
 	}
 }

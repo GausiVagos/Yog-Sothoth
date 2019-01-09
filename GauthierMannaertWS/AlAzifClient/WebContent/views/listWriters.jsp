@@ -12,7 +12,7 @@
   <body>
 	  <h1>Auteurs de l'univers Lovecraftien</h1>
 	  <%
-	  ArrayList<Writer> lWri = (ArrayList<Writer>)request.getAttribute("list");
+	  Writer[] lWri = (Writer[])request.getAttribute("list");
 	  %>	  
 		  <table border="1" cellspacing="0" cellpadding="5">
 			 <%

@@ -20,7 +20,7 @@
 			</tr>
 			<tr>
 				<td>Bio : </td>
-				<td><input name="bio" maxlength=500 size=150></td>
+				<td><input name="bio" maxlength=500 size=100></td>
 			</tr>
 			<tr>
            		<td colspan="2" align= "center"> <input type="submit" name= "valider"value="Ajouter l'écrivain"/></td>
