@@ -40,4 +40,10 @@ public class WriterBusiness {
 	{
 		w=wdao.find(Integer.toString(i));
 	}
+	
+	public boolean addWriter(String p, String n, String b)
+	{
+		w=new Writer(p,n,b);
+		return wdao.create(w);
+	}
 }

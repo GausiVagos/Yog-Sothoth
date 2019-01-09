@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="alazif.javabean.Writer" %>
+<%@ page import="alazif.javabean.User" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -15,6 +16,7 @@
 	  %>	  
 		  <table border="1" cellspacing="0" cellpadding="5">
 			 <%
+			 if(lWri!=null)
 			 	for(Writer w : lWri){
 			 %>
 			  	<tr>
@@ -25,5 +27,18 @@
 			 	}	
 			 %>
 		  </table>
+		  <%
+			  try
+			  {
+				User u=(User)request.getSession().getAttribute("user");
+				if(u!=null&&u.getAdmin())
+				{
+		  	
+		  		%>
+		  			<a href="/AlAzifClient/addwriter">Ajouter un écrivain</a>
+		  		<% 
+	  			}
+			  }catch(NullPointerException e){}
+		  %>
   </body>
 </html>
