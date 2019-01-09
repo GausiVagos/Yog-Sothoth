@@ -80,4 +80,12 @@
     <servlet-name>AddCritic</servlet-name>
     <url-pattern>/addcritic</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>AddWriter</servlet-name>
+    <servlet-class>alazif.servlets.AddWriter</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddWriter</servlet-name>
+    <url-pattern>/addwriter</url-pattern>
+  </servlet-mapping>
 </web-app>
