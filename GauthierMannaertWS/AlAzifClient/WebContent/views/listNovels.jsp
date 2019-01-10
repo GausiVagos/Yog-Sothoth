@@ -12,7 +12,7 @@
   <body>
 	  <h1>Nouvelles de l'univers Lovecraftien</h1>
 	  <%
-	  ArrayList<Novel> lNov = (ArrayList<Novel>)request.getAttribute("list");
+	  Novel[] lNov = (Novel[])request.getAttribute("all");
 	  %>	  
 		  <table border="1" cellspacing="0" cellpadding="5">
 			 <%

@@ -25,8 +25,8 @@ public class NovelList extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		NovelBusiness nBusi = new NovelBusiness();
-		List<Novel> lNov = nBusi.getListNovel();
-		request.setAttribute("list", lNov);
+		Novel[] allN = nBusi.getListNovel();
+		request.setAttribute("all", allN);
 		getServletContext().getRequestDispatcher("/views\\listNovels.jsp").forward(request, response);
 	}
 

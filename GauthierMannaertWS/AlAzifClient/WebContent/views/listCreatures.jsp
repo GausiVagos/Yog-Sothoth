@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ page import="alazif.javabean.Creature" %>
 <%@ page import="alazif.javabean.CreatureName" %>
+<%@ page import="alazif.javabean.User" %>
 <!DOCTYPE html>
 <html>
   <head>
@@ -15,6 +16,7 @@
 	  %>	  
 		  <table border="1" cellspacing="0" cellpadding="5">
 			 <%
+			 	if(tabCre!=null)
 			 	for(Creature c : tabCre){
 			 %>
 			  	<tr>
@@ -31,5 +33,18 @@
 			 	}	
 			 %>
 		  </table>
+		  <%
+			  try
+			  {
+				User u=(User)request.getSession().getAttribute("user");
+				if(u!=null&&u.getAdmin())
+				{
+		  	
+		  		%>
+		  			<a href="/AlAzifClient/addcreature">Ajouter une créature</a>
+		  		<% 
+	  			}
+			  }catch(NullPointerException e){}
+		  %>
   </body>
 </html>

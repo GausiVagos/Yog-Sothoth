@@ -96,4 +96,12 @@
     <servlet-name>AddNovel</servlet-name>
     <url-pattern>/addnovel</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>AddCreature</servlet-name>
+    <servlet-class>alazif.servlets.AddCreature</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AddCreature</servlet-name>
+    <url-pattern>/addcreature</url-pattern>
+  </servlet-mapping>
 </web-app>

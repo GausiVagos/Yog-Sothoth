@@ -1,12 +1,13 @@
 package alazif.business;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import alazif.dao.CreatureDAO;
 import alazif.dao.CreatureNameDAO;
 import alazif.javabean.Creature;
 import alazif.javabean.CreatureName;
+import alazif.javabean.Novel;
+import alazif.javabean.Writer;
 
 public class CreatureBusiness {
 	
@@ -66,6 +67,12 @@ public class CreatureBusiness {
 	public Creature[] getCreaturesFromNovel(int novelId)
 	{
 		return cdao.getFromNovel(novelId);
+	}
+	
+	public boolean addCreature(String desc, Writer w, Set<Novel> novels, Set<CreatureName> names)
+	{
+		c=new Creature(desc, w, novels, names);
+		return cdao.create(c);
 	}
 	
 }

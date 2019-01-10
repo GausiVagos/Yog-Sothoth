@@ -9,10 +9,7 @@ page language="java" contentType="text/html; charset=UTF-8"
 <title>Necronomidex</title>
 </head>
 <body>
-<%
-	Writer[] all=(Writer[])request.getAttribute("all");
-%>
-	<h2>Entrez les données du nouvel écrivain</h2>
+	<h2>Entrez les données du nouveau récit</h2>
 	<form action="addnovel" method="POST">
 		<table border=1>
 			<tr>
@@ -28,6 +25,7 @@ page language="java" contentType="text/html; charset=UTF-8"
 				<td>
 					<select name="writer">
 						<%
+						Writer[] all=(Writer[])request.getAttribute("all");
 							if(all!=null)
 								for(Writer w : all)
 								{

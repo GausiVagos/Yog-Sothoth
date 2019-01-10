@@ -25,15 +25,8 @@ public class NovelBusiness {
 		this.n = n;
 	}
 	
-	public List<Novel> getListNovel(){
-		Novel[] tabNov = ndao.getAll();
-		List<Novel> lNov = new ArrayList<Novel>();
-		
-		for(Novel nov : tabNov) {
-			lNov.add(nov);
-		}
-		
-		return lNov;
+	public Novel[] getListNovel(){
+		return ndao.getAll();
 	}
 	
 	public Novel[] getFromWriter(int writerId)

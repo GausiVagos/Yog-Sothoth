@@ -263,7 +263,7 @@ public class CreatureAPI {
 			id = addcre.getInt(1);
 			
 			//Ajout des apparitions éventuelles
-			if(!c.getSetOfNovels().isEmpty())
+			if(c!=null&&!c.getSetOfNovels().isEmpty())
 			{
 				for(Novel n : c.getSetOfNovels())
 				{
@@ -274,7 +274,7 @@ public class CreatureAPI {
 				}
 			}
 			//Ajout des noms éventuels
-			if(!c.getSetOfNames().isEmpty())
+			if(c!=null&&!c.getSetOfNames().isEmpty())
 			{
 				for(CreatureName cn : c.getSetOfNames())
 				{
