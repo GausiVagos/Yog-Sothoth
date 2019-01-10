@@ -13,8 +13,8 @@
 		<%Creature c=(Creature)request.getAttribute("creature"); %>
 		<h1>
 			<%
-				if(c.getFirstName()!=null)	
-					out.print(c.getFirstName().getName());
+				if(c.findFirstName()!=null)	
+					out.print(c.findFirstName().getName());
 				else
 					out.print("-Créature non nommée-");
 			%>
@@ -23,7 +23,7 @@
 			<%
 				for(CreatureName cn : c.getSetOfNames())
 				{
-					if(cn!=c.getFirstName())
+					if(cn!=c.findFirstName())
 					{
 						out.print("/ "+cn.getName());
 					}

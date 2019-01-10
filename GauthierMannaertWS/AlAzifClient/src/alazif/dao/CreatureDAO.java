@@ -20,6 +20,7 @@ public class CreatureDAO extends DAO<Creature> {
 		{
 			ObjectMapper mapper = new ObjectMapper();
 			String json=mapper.writeValueAsString(obj);
+			//System.out.println(json);
 			ClientResponse response = Client.create(new DefaultClientConfig()).resource(branchUrl)
 				    .type(MediaType.APPLICATION_JSON)
 				    .post(ClientResponse.class, json);

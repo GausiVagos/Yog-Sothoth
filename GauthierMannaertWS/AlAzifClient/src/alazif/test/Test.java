@@ -1,32 +1,24 @@
 package alazif.test;
 
-import alazif.dao.CriticDAO;
-import alazif.javabean.Critic;
+import java.util.HashSet;
+import java.util.Set;
+
+import alazif.dao.CreatureDAO;
+import alazif.dao.NovelDAO;
+import alazif.dao.WriterDAO;
+import alazif.javabean.Creature;
+import alazif.javabean.CreatureName;
+import alazif.javabean.Novel;
 
 public class Test {
 
 	public static void main(String[] args) {
-		//CreatureDAO cdao=new CreatureDAO();
-		//Set<Novel> novels = new HashSet<Novel>();
-		//novels.add(new NovelDAO().find("1"));
-		//novels.add(new NovelDAO().find("2"));
-		//Set<CreatureName> names=new HashSet<CreatureName>();
-		//names.add(new CreatureName("Bobby"));
-		//names.add(new CreatureName("Bobby l'invincible"));
-		//Creature bobby = cdao.find("15");
-		//bobby.addName(new CreatureName("Bobby l'uniquement unique"));
-		//bobby.addName(new CreatureName("Bobby le casse-burne"));
-		//System.out.println(bobby.getSetOfNames().size());
-		//System.out.println(cdao.update(bobby));
-		/*
-		Writer w = new Writer();
-		WriterDAO wdao = new WriterDAO();
-		w = wdao.find("1");
-		System.out.println(w.getFirstName() + " " + w.getLastName());
-		*/
-		CriticDAO cdao=new CriticDAO();
-		Critic c=new Critic(41,21,"Plutôt sympa",4);
-		System.out.println(cdao.create(c));
+		Set<CreatureName> names=new HashSet<CreatureName>();
+		names.add(new CreatureName("On s'AMUSE"));
+		Set<Novel> novels=new HashSet<Novel>();
+		novels.add(new NovelDAO().find("2"));
+		Creature c=new Creature("Description", new WriterDAO().find("21"), novels, names);
+		System.out.println(new CreatureDAO().create(c));
 	}
 
 }

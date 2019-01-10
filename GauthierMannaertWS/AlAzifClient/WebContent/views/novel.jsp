@@ -27,8 +27,8 @@
 				<li>
 					<a href="/AlAzifClient/creature?id=<%out.print(c.getCreatureId()); %>">
 						<%
-							if(c.getFirstName()!=null)	
-								out.print(c.getFirstName().getName());
+							if(c.findFirstName()!=null)	
+								out.print(c.findFirstName().getName());
 							else
 								out.print("-Créature non nommée-");
 						%>

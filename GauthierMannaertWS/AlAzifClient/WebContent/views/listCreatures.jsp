@@ -23,7 +23,7 @@
 			  		<td>
 			  		<%
 			  			if(!c.getSetOfNames().isEmpty())
-			  				out.print(c.getFirstName().getName());
+			  				out.print(c.findFirstName().getName());
 			  			else
 			  				out.print("-Créature non nommée-");
 			  		%></td>

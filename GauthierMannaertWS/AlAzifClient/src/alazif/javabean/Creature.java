@@ -108,7 +108,7 @@ public class Creature implements Serializable{
 	
 	//Autres méthodes
 	
-	public CreatureName getFirstName()
+	public CreatureName findFirstName()
 	{
 		CreatureName cn=null;
 		if(!setOfNames.isEmpty())
