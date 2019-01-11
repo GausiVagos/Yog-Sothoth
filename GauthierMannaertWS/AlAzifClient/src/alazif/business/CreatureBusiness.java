@@ -75,4 +75,9 @@ public class CreatureBusiness {
 		return cdao.create(c);
 	}
 	
+	public boolean deleteCreature(int id)
+	{
+		c.setCreatureId(id);
+		return cdao.delete(c);
+	}
 }

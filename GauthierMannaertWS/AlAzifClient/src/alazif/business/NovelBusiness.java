@@ -44,4 +44,10 @@ public class NovelBusiness {
 		n=new Novel(t,y,w,s);
 		return ndao.create(n);
 	}
+	
+	public boolean deleteNovel(int nId)
+	{
+		n.setNovelId(nId);
+		return ndao.delete(n);
+	}
 }

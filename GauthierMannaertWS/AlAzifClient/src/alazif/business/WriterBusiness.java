@@ -39,4 +39,10 @@ public class WriterBusiness {
 		w=new Writer(p,n,b);
 		return wdao.create(w);
 	}
+	
+	public boolean deleteWriter(int id)
+	{
+		w.setWriterId(id);
+		return wdao.delete(w);
+	}
 }

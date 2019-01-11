@@ -1,5 +1,6 @@
 <%@ page import="alazif.javabean.Writer" %>
 <%@ page import="alazif.javabean.Novel" %>
+<%@ page import="alazif.javabean.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -30,5 +31,19 @@
 		{%>
 			<p>Notre base de données ne mentionne malheureusement pas les romans de cet auteur.</p>
 		<%}%>
+		<p>
+		<%
+			  try
+			  {
+				User u=(User)request.getSession().getAttribute("user");
+				if(u!=null&&u.getAdmin())
+				{
+		  		%>
+		  			<a href="/AlAzifClient/deleteelement?type=w&id=<%out.print(w.getWriterId());%>">SUPPRIMER CET AUTEUR</a>
+		  		<% 
+	  			}
+			  }catch(NullPointerException e){}
+		  %>
+		  </p>
   </body>
 </html>

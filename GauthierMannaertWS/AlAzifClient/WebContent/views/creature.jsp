@@ -1,4 +1,5 @@
 <%@ page import="alazif.javabean.Novel" %>
+<%@ page import="alazif.javabean.User" %>
 <%@ page import="alazif.javabean.Creature" %>
 <%@ page import="alazif.javabean.CreatureName" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -47,5 +48,19 @@
 		else{%>
 		<p>Notre base de donnée ne contient malheureusement pas de détaills concernant les romans où cette créature apparaît.</p>
 		<%} %>
+		<p>
+		<%
+			  try
+			  {
+				User u=(User)request.getSession().getAttribute("user");
+				if(u!=null&&u.getAdmin())
+				{
+		  		%>
+		  			<a href="/AlAzifClient/deleteelement?type=c&id=<%out.print(c.getCreatureId());%>">SUPPRIMER CETTE CREATURE</a>
+		  		<% 
+	  			}
+			  }catch(NullPointerException e){}
+		  %>
+		  </p>
   </body>
 </html>

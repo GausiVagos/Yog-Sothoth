@@ -3,6 +3,7 @@
 <%@ page import="alazif.javabean.Critic" %>
 <%@ page import="alazif.business.CriticRow" %>
 <%@ page import="java.util.Set" %>
+<%@ page import="alazif.javabean.User" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -46,7 +47,7 @@
 		
 		<%
 		Set<CriticRow> critics=(Set<CriticRow>)request.getAttribute("critics");
-		if(!critics.isEmpty())
+		if(critics!=null&&!critics.isEmpty())
 		{
 		%>
 		<h3>Critiques d'utilisateurs à propos de ce roman : </h3>
@@ -61,5 +62,19 @@
 		</ul>
 		<i>Avis de la communauté : <%out.print(n.calculerMoyenne()); %></i>
 		<%} %>
+		<p>
+		<%
+			  try
+			  {
+				User u=(User)request.getSession().getAttribute("user");
+				if(u!=null&&u.getAdmin())
+				{
+		  		%>
+		  			<a href="/AlAzifClient/deleteelement?type=n&id=<%out.print(n.getNovelId());%>">SUPPRIMER CE RECIT</a>
+		  		<% 
+	  			}
+			  }catch(NullPointerException e){}
+		  %>
+		  </p>
   </body>
 </html>

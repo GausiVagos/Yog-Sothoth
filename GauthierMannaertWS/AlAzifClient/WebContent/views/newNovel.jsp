@@ -44,7 +44,7 @@ page language="java" contentType="text/html; charset=UTF-8"
 				<td><input name="syn" maxlength=500 size=100></td>
 			</tr>
 			<tr>
-           		<td colspan="2" align= "center"> <input type="submit" name= "valider"value="Ajouter l'écrivain"/></td>
+           		<td colspan="2" align= "center"> <input type="submit" name= "valider"value="Ajouter le récit"/></td>
 			</tr>
 		</table>
 	</form>

@@ -104,4 +104,20 @@
     <servlet-name>AddCreature</servlet-name>
     <url-pattern>/addcreature</url-pattern>
   </servlet-mapping>
+  <servlet>
+    <servlet-name>ModifyNovel</servlet-name>
+    <servlet-class>alazif.servlets.ModifyNovel</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ModifyNovel</servlet-name>
+    <url-pattern>/modifynovel</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>DeleteElement</servlet-name>
+    <servlet-class>alazif.servlets.DeleteElement</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteElement</servlet-name>
+    <url-pattern>/deleteelement</url-pattern>
+  </servlet-mapping>
 </web-app>

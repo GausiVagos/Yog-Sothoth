@@ -10,7 +10,7 @@
 	  <title>Necronomidex</title>
   </head>
   <body>
-	  <h1>Nouvelles de l'univers Lovecraftien</h1>
+	  <h1>Récits du mythe de Cthulhu</h1>
 	  <%
 	  Novel[] lNov = (Novel[])request.getAttribute("all");
 	  %>	  
